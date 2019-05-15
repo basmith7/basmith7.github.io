@@ -34,7 +34,7 @@ Graduated from Rio Salado College with a Associates in Business. Future plans to
 
 ## References
 
-> Tyler Stratton Director of Database Marketing at SmartPractice (602) 225-0595 x7525
-> Jonathan Coffey Senior Product Manager at SmartRent (520) 610-8587
-> Ramsey Gurley Software Developer at SmartPractice (951) 395-5561 x5561
-> Tim Marshall Product Manager at SmartPractice (602) 225-0595 x7245
+Tyler Stratton Director of Database Marketing at SmartPractice (602) 225-0595 x7525  
+Jonathan Coffey Senior Product Manager at SmartRent (520) 610-8587  
+Ramsey Gurley Software Developer at SmartPractice (951) 395-5561 x5561  
+Tim Marshall Product Manager at SmartPractice (602) 225-0595 x7245  
