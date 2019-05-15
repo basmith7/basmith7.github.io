@@ -9,12 +9,13 @@ Skills
 
 **Software**  
 Microsoft Windows, Microsoft Excel, Microsoft Access, Microsoft Word, Linux, IBM Cognos BI, IBM SPSS, Docker, JIRA Software, JIRA Service Desk, Git, Google Apps  
-**Programing Languages:**  
+**Languages**  
 SQL (PostgreSQL, Sybase, MySQL), HTML, CSS, PHP, Java
 
 ## Experience
   
-### BUSINESS SYSTEM ANALYST: OptimumHQ (Mesa, AZ) April 2017 - Current
+### Business System Analyst  
+**OptimumHQ (Mesa, AZ) April 2017 - Current**
 OptimumHQ is a business systems platform where clients can create custom solutions for problems faster than traditional custom development. As a business systems analyst, I am tasked with creating solutions inside the platform for our clients. This involved: communicating with clients to collect user stories and development requirements; designing system architecture, data structures, workflows, and the user experience to meet client’s needs, while also minimizing complexity and build time for the OptimumHQ platform; implementing and supporting the solutions in the OptimumHQ platform; all while communicating throughout the process with clients (usually inside a loosely scrum structure). 
 
 ### DATA ANALYST: SmartPractice (Phoenix, AZ) 2013 - April 2017
