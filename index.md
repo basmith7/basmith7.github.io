@@ -1,13 +1,16 @@
 
-# BRIAN SMITH
-## Business Systems Analyst  
+# Brian Smith
 (623) 565-9402  
 brian@basmith.net  
+
+## Business Systems Analyst  
 Business Systems and Data Analyst with six years experience, strong computer, business, and communication skills, with an associate’s degree in business seeking a career in technology while pursuing a bachelor's degree in Computer Information Systems.
 Skills
 
-**SOFTWARE:** Microsoft Windows, Microsoft Excel, Microsoft Access, Microsoft Word, Linux, IBM Cognos BI, IBM SPSS, Docker, JIRA Software, JIRA Service Desk, Git, Google Apps  
-**COMPUTER LANGUAGES:** SQL (PostgreSQL, Sybase, MySQL), HTML, CSS, PHP, Java
+**Software**  
+Microsoft Windows, Microsoft Excel, Microsoft Access, Microsoft Word, Linux, IBM Cognos BI, IBM SPSS, Docker, JIRA Software, JIRA Service Desk, Git, Google Apps  
+**Programing Languages:**  
+SQL (PostgreSQL, Sybase, MySQL), HTML, CSS, PHP, Java
 
 ## Experience
   
