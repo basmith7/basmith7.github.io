@@ -1,9 +1,6 @@
 
-# Brian Smith
-(623) 565-9402  
-brian@basmith.net  
+(623) 565-9402 | brian@basmith.net  
 
-## Business Systems Analyst  
 Business Systems and Data Analyst with six years experience, strong computer, business, and communication skills, with an associate’s degree in business seeking a career in technology while pursuing a bachelor's degree in Computer Information Systems.
 Skills
 
