@@ -47,7 +47,10 @@ about_profile_image: images/profile.jpg
 about_content: | # this will include new lines to allow paragraphs
   Hi, I'm Brian and I am a results-driven Senior Solutions Architect with 10+ years of experience architecting and implementing client-focused solutions. Expertise in both traditional development and low-code platforms, with a track record of successful projects in startup and enterprise environments.
 
-  I am most skilled in: <mark>AWS</mark> and <mark>Eating Pizza</mark>
+  I've become proficient in a lot of software in my career, such as <mark>Microsoft Windows</mark>, <mark>Microsoft Excel</mark>, <mark>Microsoft Access</mark>, <mark>IBM Cognos BI</mark>, <mark>IBM SPSS</mark>, <mark>Docker</mark>, <mark>JIRA</mark>, <mark>JIRA Service Desk</mark>, <mark>Git</mark>, <mark>Google Apps</mark>, <mark>DataDog</mark>, <mark>Postman</mark>, <mark>Swagger</mark>, <mark>Retool</mark>, and <mark>Splunk</mark>. 
+
+  I've also extensively used <mark>SQL (PostgreSQL and MySQL)</mark>, <mark>Javascript</mark>, <mark>HTML</mark>, and <mark>CSS</mark> and I've acquired a passing knowledge of <mark>PHP</mark>, <mark>Java</mark>, <mark>React</mark>, and <mark>Elixir</mark>
+
 
 content:
   # - title: Projects # Title for the section
@@ -96,20 +99,21 @@ content:
   #       quote: >
   #         Established in 1636, Harvard is the oldest higher education institution in the United States, and is widely regarded in terms of its influence, reputation, and academic pedigree as a leading university in not just the US but also the world.
   #       description: | # this will include new lines to allow paragraphs
-  #         During my time at Harvard I learnt most of my key skills that have I have taken through my career such as teamwork and working to tight deadlines. I thouroughly enjoyed my time as university and learnt a lot about a healthy work life balance.
+  #         During my time at Harvard I learnt most of my key skills that have I have taken through my career such as teamwork and working to tight deadlines. I thoroughly enjoyed my time as university and learnt a lot about a healthy work life balance.
 
   #         I spent a lot of my free time as a committee member of the *Harvard Mountaineering Club* taking on roles such as *Trip Secretary* and *Vice-President*.
 
   - title: A Little More About Me
     layout: text
     content: | # this will include new lines to allow paragraphs
-      Alongside my interests in technology and software engineering some of my other interests and hobbies are:
+      Alongside my interests in technology and software, some of my other interests and hobbies are:
       - Reading Sci-Fi and Fantasy 
       - Gaming: Board and Computer
+      - Building, maintaing, and tinkering an Unraid Server
       - Biscuit, the bestest boy. 
 
-      # Look how cute. 
-      # ![Trees](/modern-resume-theme/images/landscape-trees.jpg "Trees")
+    Look how cute. 
+    [biscuit](/modern-resume-theme/images/biscuit.jpg "biscuit")
 
 # Footer
 footer_show_references: true
