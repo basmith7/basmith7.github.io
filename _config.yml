@@ -113,7 +113,7 @@ content:
       - Biscuit, the bestest boy. 
       
       Look how cute. 
-      [biscuit](/modern-resume-theme/images/biscuit.jpg "biscuit")
+      ![biscuit](/images/biscuit.jpg "biscuit")
 
 # Footer
 footer_show_references: true
