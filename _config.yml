@@ -47,9 +47,9 @@ about_profile_image: images/profile.jpg
 about_content: | # this will include new lines to allow paragraphs
   Hi, I'm Brian and I am a results-driven Senior Solutions Architect with 10+ years of experience architecting and implementing client-focused solutions. Expertise in both traditional development and low-code platforms, with a track record of successful projects in startup and enterprise environments.
 
-  I've become proficient in a lot of software in my career, such as <mark>JIRA</mark>, <mark>JIRA Service Desk</mark>, <mark>Postman</mark>, <mark>Git</mark>, <mark>Swagger</mark>, <mark>Retool</mark>, <mark>DataDog</mark>, <mark>Splunk</mark>. <mark>Docker</mark>, <mark>Microsoft Excel</mark>, <mark>Microsoft Access</mark>, <mark>Google Apps</mark>, <mark>IBM Cognos BI</mark>, and<mark>IBM SPSS</mark>. 
-
-  I've extensively used <mark>SQL (PostgreSQL and MySQL)</mark>, <mark>Javascript</mark>, <mark>HTML</mark>, and <mark>CSS</mark> and I've also worked with <mark>PHP</mark>, <mark>Java</mark>, <mark>React</mark>, and <mark>Elixir</mark>
+  In my career I've extensively used <mark>SQL (PostgreSQL and MySQL)</mark>, <mark>Javascript</mark>, <mark>HTML</mark>, and <mark>CSS</mark> and I've also worked with <mark>PHP</mark>, <mark>Java</mark>, <mark>React</mark>, and <mark>Elixir</mark>. 
+  
+  I've also become proficient in a lot of software, such as <mark>Postman</mark>, <mark>Git</mark>, <mark>JIRA</mark>, <mark>Swagger</mark>, <mark>Retool</mark>, <mark>DataDog</mark>, <mark>Splunk</mark>. <mark>Docker</mark>, <mark>Microsoft Excel</mark>, <mark>Microsoft Access</mark>, <mark>Google Apps</mark>, <mark>IBM Cognos BI</mark>, and<mark>IBM SPSS</mark>. 
 
 content:
 
@@ -105,7 +105,7 @@ content:
         link: optimumhq.com
         # link_text:
         sub_title: Solutions Architect
-        caption: 
+        caption: Apr 2018 - Apr 2021 · 3 yrs
         quote: >
           Custom ERP, built on a no-code platform, that adapts to your unique workflows, providing seamless ERP customer relationship management and automation.
         description: | # this will include new lines to allow paragraphs
@@ -119,7 +119,7 @@ content:
         link: smartpractice.com
         # link_text:
         sub_title: Data Analyst
-        caption: 
+        caption: Dec 2010 - Apr 2018 · 7 yrs
         quote: >
           Custom ERP, built on a no-code platform, that adapts to your unique workflows, providing seamless ERP customer relationship management and automation.
         description: | # this will include new lines to allow paragraphs
