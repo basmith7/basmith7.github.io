@@ -15,18 +15,18 @@ email: brian@basmith.net
 darkmode: false
 
 # Social links
-# twitter_username: facespics
+# twitter_username: 
 github_username:  basmith7
 # stackoverflow_username: 
 # dribbble_username: 
 # facebook_username: 
 # flickr_username: 
-# instagram_username: jameswgrant
+# instagram_username: 
 linkedin_username: briansmith111
-# xing_username: jekyll
-# pinterest_username: jekyll
-# youtube_username: globalmtb
-# googleplus_username: +jekyll
+# xing_username: 
+# pinterest_username: 
+# youtube_username: 
+# googleplus_username: +
 # orcid_username: 0000-0000-0000-0000
 
 # Additional icon links
@@ -47,30 +47,11 @@ about_profile_image: images/profile.jpg
 about_content: | # this will include new lines to allow paragraphs
   Hi, I'm Brian and I am a results-driven Senior Solutions Architect with 10+ years of experience architecting and implementing client-focused solutions. Expertise in both traditional development and low-code platforms, with a track record of successful projects in startup and enterprise environments.
 
-  I've become proficient in a lot of software in my career, such as <mark>Microsoft Windows</mark>, <mark>Microsoft Excel</mark>, <mark>Microsoft Access</mark>, <mark>IBM Cognos BI</mark>, <mark>IBM SPSS</mark>, <mark>Docker</mark>, <mark>JIRA</mark>, <mark>JIRA Service Desk</mark>, <mark>Git</mark>, <mark>Google Apps</mark>, <mark>DataDog</mark>, <mark>Postman</mark>, <mark>Swagger</mark>, <mark>Retool</mark>, and <mark>Splunk</mark>. 
+  I've become proficient in a lot of software in my career, such as <mark>JIRA</mark>, <mark>JIRA Service Desk</mark>, <mark>Postman</mark>, <mark>Git</mark>, <mark>Swagger</mark>, <mark>Retool</mark>, <mark>DataDog</mark>, <mark>Splunk</mark>. <mark>Docker</mark>, <mark>Microsoft Excel</mark>, <mark>Microsoft Access</mark>, <mark>Google Apps</mark>, <mark>IBM Cognos BI</mark>, and<mark>IBM SPSS</mark>. 
 
-  I've also extensively used <mark>SQL (PostgreSQL and MySQL)</mark>, <mark>Javascript</mark>, <mark>HTML</mark>, and <mark>CSS</mark> and I've acquired a passing knowledge of <mark>PHP</mark>, <mark>Java</mark>, <mark>React</mark>, and <mark>Elixir</mark>
-
+  I've extensively used <mark>SQL (PostgreSQL and MySQL)</mark>, <mark>Javascript</mark>, <mark>HTML</mark>, and <mark>CSS</mark> and I've also worked with <mark>PHP</mark>, <mark>Java</mark>, <mark>React</mark>, and <mark>Elixir</mark>
 
 content:
-  # - title: Projects # Title for the section
-  #   layout: list # Type of content section (list/text)
-  #   content:
-  #     - layout: top-middle
-  #       title: Super awesome project
-  #       link: github.com/sproogen
-  #       # link_text: Project Website
-  #       additional_links:
-  #         - title:  sproogen/modern-resume-theme
-  #           icon: fab fa-github
-  #           url: github.com/sproogen/modern-resume-theme
-  #         # - title:  Github page for project (eg. sproogen/modern-resume-theme)
-  #         #   icon: fab fa-github
-  #         #   url: Link to project (eg. sproogen.github.io/modern-resume-theme)
-  #       quote: >
-  #         This is probably one of the greatest apps ever created, if you don't agree you're probably wrong.
-  #       description: | # this will include new lines to allow paragraphs
-  #         I started this project as a way if learning <mark>React</mark> and it has since grown into a fully fledged app. I have learned many skills through this and been I'm very proud of having this in my portfolio. If you don't have a project as awesome as this I would advise you make one.
 
   - title: Experience # Title for the section
     layout: list # Type of content section (list/text)
@@ -78,7 +59,7 @@ content:
       - layout: left
         title: Pallet
         link: trypallet.com
-        # link_text: boringcompany.com
+        # link_text:
         sub_title: Solutions Consultant
         caption: Sep 2024 - March 2025 · 7 mos
         quote: >
@@ -89,19 +70,76 @@ content:
             * Collaborated with sales, product, customer success, and engineering teams to ensure successful client onboarding and ongoing satisfaction.
             * Helped reduce onboarding time by multiple weeks by compiling detailed client implementation guides for Customer Success teams from information gathered during client audits. 
             * Helped close and onboard clients ranging from $10,000 in ARR up to $200,000 in ARR, contributing significantly to revenue growth.
-  # - title: Education # Title for the section
-  #   layout: list # Type of content section (list/text)
-  #   content:
-  #     - layout: left
-  #       title: Harvard University
-  #       caption: 2010 - 2013
-  #       sub_title: BSc Computer Science
-  #       quote: >
-  #         Established in 1636, Harvard is the oldest higher education institution in the United States, and is widely regarded in terms of its influence, reputation, and academic pedigree as a leading university in not just the US but also the world.
-  #       description: | # this will include new lines to allow paragraphs
-  #         During my time at Harvard I learnt most of my key skills that have I have taken through my career such as teamwork and working to tight deadlines. I thoroughly enjoyed my time as university and learnt a lot about a healthy work life balance.
 
-  #         I spent a lot of my free time as a committee member of the *Harvard Mountaineering Club* taking on roles such as *Trip Secretary* and *Vice-President*.
+      - layout: left
+        title: SmartRent
+        link: smartrent.com
+        # link_text:
+        sub_title: Solutions Architect
+        caption: Oct 2021 - Sep 2024 · 3 yrs
+        quote: >
+          Industry leading smart home automation at multifamily scale, enabling streamline operations and enhanced residents living experiences.
+        description: | # this will include new lines to allow paragraphs
+            * Served as the primary interface between the Product team and clients, providing expert knowledge of SmartRent's products to identify and implement tailored solutions.
+            * Managed client implementations of new and existing products, ensuring on-time project delivery. 
+            * Communicated product roadmaps to clients, increasing product adoption.
+            * Documented and analyzed client feedback, resulting in numerous product enhancements and feature requests.
+            * Developed and implemented a client feedback process and ticketing system to improve feedback tracking and reporting.
+            * Worked closely with Product and Engineering teams to ensure new features and updates were meeting client expectations. 
+
+      - layout: left
+        title: Nextmune
+        link: nextmune.com
+        # link_text:
+        sub_title: Product Manager
+        caption: Apr 2021 - Oct 2021 · 7 mos
+        quote: >
+          Nextmune is a global specialty pharma company for dogs, cats and horses, focusing on allergy and dermatology offering diagnostics, prescription and non-prescription products to veterinarians and pet parents in more than 70 countries worldwide.
+        description: | # this will include new lines to allow paragraphs
+            * Managed the implementation of custom ERP platform projects, overseeing design, development, and deployment for supply chain, manufacturing, services, customer relations, and ordering.
+            * Managed concurrent projects, consistently delivering on time.
+            * Gathered and documented requirements from stakeholders across multiple business units, ensuring alignment and successful project outcomes.         
+
+      - layout: left
+        title: OptimumHQ
+        link: optimumhq.com
+        # link_text:
+        sub_title: Solutions Architect
+        caption: 
+        quote: >
+          Custom ERP, built on a no-code platform, that adapts to your unique workflows, providing seamless ERP customer relationship management and automation.
+        description: | # this will include new lines to allow paragraphs
+            * Designed and implemented custom business systems solutions for clients using the OptimumHQ platform, translating user stories and requirements into functional system architectures.
+            * Reduced client solution development time through efficient design and implementation strategies.
+            * Developed and implemented hundreds of custom workflows and data structures, improving client operational efficiency.
+            * Reduced the amount of support tickets through improving the user experience.
+
+      - layout: left
+        title: SmartPractice
+        link: smartpractice.com
+        # link_text:
+        sub_title: Data Analyst
+        caption: 
+        quote: >
+          Custom ERP, built on a no-code platform, that adapts to your unique workflows, providing seamless ERP customer relationship management and automation.
+        description: | # this will include new lines to allow paragraphs
+            * Designed and developed standard and custom reports/dashboards using Cognos, Excel, Access, and Sybase SQL, providing actionable insights to marketing, data, sales, and product teams.
+            * Reduced report generation time through the implementation of optimized SQL queries and data structures.
+            * Implemented a ticketing queue to manage data service requests using Jira Service Desk, streamlining request handling and improving response times.
+            * Increased data accuracy through the implementation of data validation and quality control processes.
+            * Converted legacy Crystal Reports to modern reporting platforms, improving accessibility and efficiency.
+
+  - title: Education # Title for the section
+    layout: list # Type of content section (list/text)
+    content:
+      - layout: left
+        title: Rio Salado Community College 
+        caption: May 2018
+        sub_title: Associate Degree in Business
+        quote: 
+        description: | # this will include new lines to allow paragraphs
+          Graduated from Rio Salado College with an Associates in Business. 
+
 
   - title: A Little More About Me
     layout: text
@@ -109,11 +147,10 @@ content:
       Alongside my interests in technology and software, some of my other interests and hobbies are:
       - Reading Sci-Fi and Fantasy 
       - Gaming: Board and Computer
-      - Building, maintaing, and tinkering an Unraid Server
-      - Biscuit, the bestest boy. 
+      - Building, maintaining, and tinkering on a home Unraid Media Server
+      - Biscuit, the bestest boy. Look how cute.
       
-      Look how cute. 
-      ![biscuit](/images/biscuit.jpg "biscuit")
+          ![biscuit](/images/biscuit.jpg "biscuit")
 
 # Footer
 footer_show_references: true
