@@ -1,9 +1,133 @@
 ---
-#
-# By default, content added below the "---" mark will appear in the home page
-# between the top bar and the list of recent posts.
-# To change the home page layout, edit the _layouts/home.html file.
-# See: https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-#
-layout: default
+layout: null
+title: Brian Smith — Senior Business Consultant
 ---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Brian Smith — Senior Business Consultant, Solutions Architect, and Product Partner.">
+  <title>Brian Smith — Senior Business Consultant</title>
+  <link rel="icon" href="/images/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/main.css">
+</head>
+<body>
+  <div class="aurora aurora-one" aria-hidden="true"></div>
+  <div class="aurora aurora-two" aria-hidden="true"></div>
+  <div class="horizon-grid" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <main class="resume-shell">
+    <header class="hero panel">
+      <div class="hero-copy">
+        <p class="eyebrow">Professional profile <span aria-hidden="true">//</span> 2026</p>
+        <nav class="theme-picker" aria-label="Choose resume appearance">
+          <button type="button" class="theme-pill" data-theme-choice="professional" aria-pressed="false">Professional</button>
+          <button type="button" class="theme-pill" data-theme-choice="ai-neon" aria-pressed="true">AI Neon</button>
+          <button type="button" class="theme-pill" data-theme-choice="hackerman" aria-pressed="false">Hackerman</button>
+        </nav>
+        <h1>Brian<br>Smith</h1>
+        <p class="headline">Senior Business Consultant <span aria-hidden="true">·</span> Solutions Architect <span aria-hidden="true">·</span> Product Partner</p>
+        <div class="contact-links" aria-label="Contact Brian Smith">
+          <a href="mailto:brian@basmith.net">brian@basmith.net</a>
+          <a href="https://www.linkedin.com/in/briansmith111">LinkedIn</a>
+          <a href="https://github.com/basmith7">GitHub</a>
+          <a href="/assets/brian-smith-resume.pdf" download>Download detailed résumé</a>
+        </div>
+      </div>
+      <figure class="portrait"><img src="/images/profile-cyberpunk.png" alt="Brian Smith holding Biscuit"></figure>
+    </header>
+
+    <div class="resume-grid">
+      <aside class="sidebar panel">
+        <section>
+          <p class="section-label">Signal</p>
+          <p>Customer-focused SaaS consultant translating data, operational needs, and product capability into measurable outcomes.</p>
+        </section>
+        <section>
+          <p class="section-label">Core systems</p>
+          <ul class="skill-list" aria-label="Skills">
+            <li>Business Intelligence</li><li>SaaS Consulting</li><li>SQL &amp; Data Analysis</li><li>Product Discovery</li><li>Stakeholder Alignment</li><li>Agile Delivery</li><li>Jira &amp; REST APIs</li><li>Client Enablement</li>
+          </ul>
+        </section>
+        <section>
+          <p class="section-label">Toolset</p>
+          <p class="muted">Jira, Git, Datadog, Postman, Docker, Cloudflare, Twilio, Swagger, Retool, Splunk, Excel, Access, IBM Cognos BI, IBM SPSS, Unraid</p>
+        </section>
+        <section>
+          <p class="section-label">Education</p>
+          <p><strong>Associate Degree in Business</strong><br><span class="muted">Rio Salado College<br>Tempe, AZ · May 2018</span></p>
+        </section>
+        <section>
+          <p class="section-label">Certifications</p>
+          <p class="muted">Certified Scrum Product Owner (CSPO)<br>Certified ScrumMaster (CSM)</p>
+        </section>
+      </aside>
+
+      <div class="content panel">
+        <section aria-labelledby="experience-heading">
+          <div class="section-heading"><p class="section-label">Career log</p><h2 id="experience-heading">Experience</h2></div>
+          <ol class="timeline">
+            <li class="role current">
+              <div class="role-meta"><span>June 2025 — Present</span><span>Lehi, UT</span></div>
+              <h3>Senior Business Consultant</h3><p class="company">Entrata</p>
+              <p class="role-intro">Entrata is a global property-management SaaS platform that automates rent payments, leasing, maintenance, and resident communication.</p>
+              <ul><li>Serve as subject-matter expert for Entrata Business Intelligence, providing high-level post-sales consulting to multifamily clients.</li><li>Configure software around client operations to support successful implementation and long-term adoption.</li><li>Lead performance analyses of financial results, leasing velocity, and market conditions to demonstrate the value of business intelligence.</li><li>Train clients in BI concepts and platform best practices, enabling self-sufficiency.</li></ul>
+            </li>
+            <li class="role">
+              <div class="role-meta"><span>Sep 2024 — Mar 2025</span><span>San Francisco, CA</span></div>
+              <h3>Senior Solutions Architect</h3><p class="company">Pallet</p>
+              <p class="role-intro">Modern SaaS and AI-powered logistics software for transportation and warehouse management.</p>
+              <ul><li>Led client audits and product discovery to identify product gaps and opportunities.</li><li>Created requirements and user stories for new modules aligned to customer needs and business goals.</li><li>Partnered with Product and Engineering to prioritize key features across logistics products.</li><li>Optimized onboarding, reducing time by two months while improving satisfaction and retention.</li></ul>
+            </li>
+            <li class="role">
+              <div class="role-meta"><span>Oct 2021 — Sep 2024</span><span>Scottsdale, AZ</span></div>
+              <h3>Senior Solutions Architect</h3><p class="company">SmartRent</p>
+              <p class="role-intro">Enterprise SaaS smart-home automation and IoT platform for the multifamily industry.</p>
+              <ul><li>Used customer insights and usage data to drive product improvements, supporting approximately 95% hardware uptime and reducing escalated support inquiries by about 50%.</li><li>Drove smart-home IoT feature rollout across 100K+ units.</li><li>Facilitated cross-functional delivery between enterprise clients, product, engineering, design, and go-to-market teams.</li><li>Established a Jira Service Desk customer-feedback loop to improve product iteration.</li></ul>
+            </li>
+            <li class="role">
+              <div class="role-meta"><span>Apr 2021 — Oct 2021</span><span>Mesa, AZ</span></div>
+              <h3>Product Manager</h3><p class="company">Nextmune</p>
+              <ul><li>Managed custom ERP implementation projects across supply chain, manufacturing, services, CRM, and ordering.</li><li>Delivered concurrent projects on time and documented requirements across business units.</li></ul>
+            </li>
+            <li class="role">
+              <div class="role-meta"><span>Apr 2018 — Apr 2021</span><span>Mesa, AZ</span></div>
+              <h3>Solutions Architect</h3><p class="company">OptimumHQ</p>
+              <ul><li>Designed and implemented custom business systems using a no-code platform.</li><li>Built hundreds of workflows and data structures that improved client operations and user experience.</li></ul>
+            </li>
+            <li class="role">
+              <div class="role-meta"><span>Dec 2010 — Apr 2018</span><span>Phoenix, AZ</span></div>
+              <h3>Data Analyst</h3><p class="company">SmartPractice</p>
+              <ul><li>Designed reports and dashboards using Cognos, Excel, Access, and Sybase SQL for marketing, sales, product, and data teams.</li><li>Improved data quality and reporting efficiency through validation and optimized SQL.</li></ul>
+            </li>
+          </ol>
+        </section>
+        <section class="achievements" aria-labelledby="achievements-heading">
+          <div class="section-heading"><p class="section-label">Selected impact</p><h2 id="achievements-heading">Product achievements</h2></div>
+          <ul><li>Oversaw development of a System Health Dashboard from concept to launch, improving enterprise visibility and reducing escalated hardware support calls by 50%.</li><li>Supported hardware and software products from development through rollout, increasing total unit count by 100K+ and ARR by $400K+.</li><li>Led the delivery of a custom ERP for a veterinary lab covering customer portal, order entry, laboratory integration, manufacturing, fulfillment, shipping, billing, and accounting.</li></ul>
+        </section>
+      </div>
+    </div>
+    <footer>© Brian Smith <span aria-hidden="true">//</span> Built for humans first.</footer>
+  </main>
+  <script>
+    (() => {
+      const choices = [...document.querySelectorAll('[data-theme-choice]')];
+      const savedTheme = localStorage.getItem('resume-theme');
+      const availableThemes = choices.map((choice) => choice.dataset.themeChoice);
+      const setTheme = (theme) => {
+        document.documentElement.dataset.theme = theme;
+        choices.forEach((choice) => choice.setAttribute('aria-pressed', String(choice.dataset.themeChoice === theme)));
+        localStorage.setItem('resume-theme', theme);
+      };
+      setTheme(availableThemes.includes(savedTheme) ? savedTheme : 'professional');
+      choices.forEach((choice) => choice.addEventListener('click', () => setTheme(choice.dataset.themeChoice)));
+    })();
+  </script>
+</body>
+</html>
