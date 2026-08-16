@@ -4,6 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Brian Smith — Senior Business Consultant, Solutions Architect, and Product Partner.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://basmith.net/">
+  <meta property="og:title" content="Brian Smith — Senior Business Consultant">
+  <meta property="og:description" content="Senior Business Consultant, Solutions Architect, and Product Partner.">
+  <meta property="og:image" content="https://basmith.net/images/profile.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Brian Smith — Senior Business Consultant">
+  <meta name="twitter:description" content="Senior Business Consultant, Solutions Architect, and Product Partner.">
+  <meta name="twitter:image" content="https://basmith.net/images/profile.jpg">
   <title>Brian Smith — Senior Business Consultant</title>
   <link rel="icon" href="/images/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,15 +44,24 @@
         </nav>
         <h1>Brian<br>Smith</h1>
         <p class="headline">Senior Business Consultant <span aria-hidden="true">·</span> Solutions Architect <span aria-hidden="true">·</span> Product Partner</p>
+        <p class="mission">I help SaaS teams turn operational complexity, customer insight, and data into products people adopt—and business outcomes leaders can measure.</p>
         <div class="contact-links" aria-label="Contact Brian Smith">
           <a href="mailto:brian@basmith.net">brian@basmith.net</a>
           <a href="https://www.linkedin.com/in/briansmith111">LinkedIn</a>
           <a href="https://github.com/basmith7">GitHub</a>
           <a href="/assets/brian-smith-resume.pdf" download>Download detailed résumé</a>
+          <button class="print-link" type="button" onclick="window.print()">Print / Save PDF</button>
         </div>
       </div>
-      <figure class="portrait"><img src="/images/profile-cyberpunk.png" alt="Brian Smith holding Biscuit"></figure>
+      <figure class="portrait"><img src="/images/profile.jpg" alt="Brian Smith"></figure>
     </header>
+
+    <section class="impact-strip panel" aria-label="Impact at a glance">
+      <article><strong>100K+</strong><span>Units supported</span></article>
+      <article><strong>$400K+</strong><span>ARR influenced</span></article>
+      <article><strong>95%</strong><span>Hardware uptime</span></article>
+      <article><strong>50%</strong><span>Fewer escalations</span></article>
+    </section>
 
     <div class="resume-grid">
       <aside class="sidebar panel">
@@ -110,9 +128,13 @@
             </li>
           </ol>
         </section>
-        <section class="achievements" aria-labelledby="achievements-heading">
-          <div class="section-heading"><p class="section-label">Selected impact</p><h2 id="achievements-heading">Product achievements</h2></div>
-          <ul><li>Oversaw development of a System Health Dashboard from concept to launch, improving enterprise visibility and reducing escalated hardware support calls by 50%.</li><li>Supported hardware and software products from development through rollout, increasing total unit count by 100K+ and ARR by $400K+.</li><li>Led the delivery of a custom ERP for a veterinary lab covering customer portal, order entry, laboratory integration, manufacturing, fulfillment, shipping, billing, and accounting.</li></ul>
+        <section class="projects" aria-labelledby="projects-heading">
+          <div class="section-heading"><p class="section-label">Selected work</p><h2 id="projects-heading">Projects with impact</h2></div>
+          <div class="project-grid">
+            <article><h3>System Health Dashboard</h3><p>Product-managed a real-time enterprise dashboard from concept through launch, giving clients clearer hardware visibility and contributing to approximately 95% uptime.</p></article>
+            <article><h3>Smart-home IoT rollout</h3><p>Helped move new hardware and software products through testing, go-to-market, and rollout across 100K+ units while supporting $400K+ in ARR growth.</p></article>
+            <article><h3>Veterinary lab ERP</h3><p>Led a custom end-to-end ERP covering customer portal, lab-equipment integration, manufacturing, fulfillment, shipping, billing, and accounting.</p></article>
+          </div>
         </section>
       </div>
     </div>
@@ -123,9 +145,17 @@
       const choices = [...document.querySelectorAll('[data-theme-choice]')];
       const savedTheme = localStorage.getItem('resume-theme');
       const availableThemes = choices.map((choice) => choice.dataset.themeChoice);
+      const portrait = document.querySelector('.portrait img');
+      const portraits = {
+        professional: { src: '/images/profile.jpg', alt: 'Brian Smith' },
+        'ai-neon': { src: '/images/profile-cyberpunk.png', alt: 'Brian Smith holding Biscuit' },
+        hackerman: { src: '/images/profile-cyberpunk.png', alt: 'Brian Smith holding Biscuit' }
+      };
       const setTheme = (theme) => {
         document.documentElement.dataset.theme = theme;
         choices.forEach((choice) => choice.setAttribute('aria-pressed', String(choice.dataset.themeChoice === theme)));
+        portrait.src = portraits[theme].src;
+        portrait.alt = portraits[theme].alt;
         localStorage.setItem('resume-theme', theme);
       };
       setTheme(availableThemes.includes(savedTheme) ? savedTheme : 'professional');
