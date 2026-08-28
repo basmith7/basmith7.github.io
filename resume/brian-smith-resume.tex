@@ -1,12 +1,11 @@
 % Brian Smith — résumé
-% Build: pdflatex -output-directory=build brian-smith-resume.tex  (run twice)
+% Build: xelatex -output-directory=build brian-smith-resume.tex  (run twice)
 \documentclass[10pt,letterpaper]{article}
 
-\usepackage[margin=0.65in,top=0.55in,bottom=0.55in]{geometry}
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage{lmodern}
-\renewcommand{\familydefault}{\sfdefault}
+\usepackage[margin=0.62in,top=0.55in,bottom=0.55in]{geometry}
+\usepackage{fontspec}
+\setmainfont{Carlito}[Scale=0.98]
+\linespread{1.05}
 \usepackage{xcolor}
 \usepackage{titlesec}
 \usepackage{enumitem}
@@ -21,14 +20,14 @@
 \setlength{\parindent}{0pt}
 
 \titleformat{\section}{\large\bfseries\color{accent}\uppercase}{}{0pt}{}[{\color{rulegray}\titlerule}]
-\titlespacing*{\section}{0pt}{9pt}{4pt}
+\titlespacing*{\section}{0pt}{11pt}{5pt}
 
 \newcommand{\role}[4]{% company/location, title, dates, blurb
-  \vspace{4pt}%
+  \vspace{5pt}%
   {\textbf{#2}, #1 \hfill \textbf{#3}}\par
   {\small\itshape #4\par}}
 
-\setlist[itemize]{leftmargin=1.2em,itemsep=1pt,parsep=0pt,topsep=2pt,label=\textcolor{accent}{\textbullet}}
+\setlist[itemize]{leftmargin=1.2em,itemsep=2pt,parsep=0pt,topsep=3pt,label=\textcolor{accent}{\textbullet}}
 
 \begin{document}
 
