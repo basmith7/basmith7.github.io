@@ -2,10 +2,10 @@
 % Build: xelatex -output-directory=build brian-smith-resume.tex  (run twice)
 \documentclass[10pt,letterpaper]{article}
 
-\usepackage[margin=0.62in,top=0.55in,bottom=0.55in]{geometry}
+\usepackage[hmargin=1in,vmargin=0.55in]{geometry}
 \usepackage{fontspec}
 \setmainfont{Carlito}[Scale=0.98]
-\linespread{1.05}
+\linespread{1.03}
 \usepackage{xcolor}
 \usepackage{titlesec}
 \usepackage{enumitem}
@@ -24,9 +24,9 @@
 
 \newcommand{\role}[4]{% company/location, title, dates, blurb
   \vspace{4pt}%
-  \begin{minipage}[t]{0.25\textwidth}\raggedright\textbf{#2}\\ #1\end{minipage}\hfill
-  \begin{minipage}[t]{0.53\textwidth}\small\itshape #4\end{minipage}\hfill
-  \begin{minipage}[t]{0.17\textwidth}\raggedleft\textbf{#3}\end{minipage}\par}
+  \begin{minipage}[t]{0.26\textwidth}\raggedright\textbf{#2}\\ #1\end{minipage}\hfill
+  \begin{minipage}[t]{0.47\textwidth}\small\itshape #4\end{minipage}\hfill
+  \begin{minipage}[t]{0.22\textwidth}\raggedleft\textbf{#3}\end{minipage}\par}
 
 \setlist[itemize]{leftmargin=1.2em,itemsep=2pt,parsep=0pt,topsep=3pt,label=\textcolor{accent}{\textbullet}}
 
