@@ -24,8 +24,9 @@
 
 \newcommand{\role}[4]{% company/location, title, dates, blurb
   \vspace{5pt}%
-  {\textbf{#2}, #1 \hfill \textbf{#3}}\par
-  {\small\itshape #4\par}}
+  \begin{minipage}[t]{0.30\textwidth}\raggedright\textbf{#2}, #1\end{minipage}\hfill
+  \begin{minipage}[t]{0.45\textwidth}\small\itshape #4\end{minipage}\hfill
+  \begin{minipage}[t]{0.17\textwidth}\raggedleft\textbf{#3}\end{minipage}\par}
 
 \setlist[itemize]{leftmargin=1.2em,itemsep=2pt,parsep=0pt,topsep=3pt,label=\textcolor{accent}{\textbullet}}
 
