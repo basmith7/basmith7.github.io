@@ -2,44 +2,91 @@
 % Build: xelatex -output-directory=build brian-smith-resume.tex  (run twice)
 \documentclass[10pt,letterpaper]{article}
 
-\usepackage[hmargin=1in,vmargin=0.55in]{geometry}
+\usepackage[left=2.75in,right=0.7in,vmargin=0.55in]{geometry}
 \usepackage{fontspec}
 \setmainfont{Carlito}[Scale=0.98]
 \linespread{1.03}
 \usepackage{xcolor}
 \usepackage{titlesec}
 \usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{calc}
 \usepackage[hidelinks]{hyperref}
 
 \definecolor{accent}{HTML}{1A5276}
 \definecolor{rulegray}{HTML}{B0B7BD}
 \definecolor{bodygray}{HTML}{2E3338}
+\definecolor{sidebargray}{HTML}{EEF1F4}
 
 \color{bodygray}
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
 
-\titleformat{\section}{\large\bfseries\color{accent}\uppercase}{}{0pt}{}[{\color{rulegray}\titlerule}]
+\titleformat{\section}{\large\bfseries\color{accent}}{}{0pt}{\MakeUppercase}[{\color{rulegray}\titlerule}]
 \titlespacing*{\section}{0pt}{10pt}{4pt}
 
+% Role header: title/company on fixed-width left, blurb fills the middle, dates right.
 \newcommand{\role}[4]{% company/location, title, dates, blurb
   \vspace{4pt}%
-  \begin{minipage}[t]{0.26\textwidth}\raggedright\textbf{#2}\\ #1\end{minipage}\hfill
-  \begin{minipage}[t]{0.47\textwidth}\small\itshape #4\end{minipage}\hfill
-  \begin{minipage}[t]{0.22\textwidth}\raggedleft\textbf{#3}\end{minipage}\par}
+  \begin{minipage}[t]{1.55in}\raggedright\textbf{#2}\\ #1\end{minipage}\hfill
+  \begin{minipage}[t]{\dimexpr\textwidth-2.85in\relax}\small\itshape #4\end{minipage}\hfill
+  \begin{minipage}[t]{1.1in}\raggedleft\small\textbf{#3}\end{minipage}\par}
 
 \setlist[itemize]{leftmargin=1.2em,itemsep=2pt,parsep=0pt,topsep=3pt,label=\textcolor{accent}{\textbullet}}
 
+% Sidebar mini-heading
+\newcommand{\sside}[1]{{\vspace{9pt}\par\textbf{\color{accent}\MakeUppercase{#1}}\par{\color{rulegray}\hrule height 0.6pt}\vspace{4pt}\par}}
+
+\newcommand{\sidebarpage}[1]{%
+\begin{tikzpicture}[remember picture, overlay]
+  \fill[sidebargray] (current page.north west) rectangle ($(current page.south west)+(2.35in,0)$);
+  \node[anchor=north west, text width=1.85in, inner sep=0pt] at ($(current page.north west)+(0.28in,-0.6in)$) {%
+    \small\color{bodygray}\linespread{1.05}\selectfont #1};
+\end{tikzpicture}}
+
+\newcommand{\sidebarone}{\sidebarpage{%
+    \sside{Contact}
+    (623) 565-9402\\
+    \href{mailto:brian@basmith.net}{brian@basmith.net}\\
+    \href{https://www.linkedin.com/in/briansmith111}{linkedin.com/in/briansmith111}\\
+    \href{https://basmith.net}{basmith.net}
+    \sside{Skills}
+    \begin{itemize}[leftmargin=1em,itemsep=1.5pt]
+      \item Stakeholder Management
+      \item Discovery \& Requirements Gathering
+      \item AI-Assisted Development (Claude Code, agentic workflows)
+      \item LLM Application Design (Anthropic API, tool use)
+      \item Agile \& Scrum, Kanban, Waterfall, Lean, PDLC
+      \item Data Analysis \& Reporting (SQL, Excel, BI Tools)
+      \item REST APIs, HTML, JS, CSS
+      \item B2B SaaS Consulting
+    \end{itemize}
+    \sside{Software}
+    Jira, Git, Claude Code, Anthropic API, Next.js, PostgreSQL, Prisma, Docker, Vercel, Render, Datadog, Postman, Cloudflare, Domo, Twilio, Swagger, Retool, Splunk, Excel, Access, IBM Cognos BI, IBM SPSS, Unraid
+}}
+
+\newcommand{\sidebartwo}{\sidebarpage{%
+    \sside{Certifications}
+    \textbf{Certified Scrum Product Owner (CSPO)}\\Scrum Alliance\\[3pt]
+    \textbf{Certified ScrumMaster (CSM)}\\Scrum Alliance\\[3pt]
+    Agile (Scrum, Kanban), Waterfall, and Lean methodologies
+    \sside{Education}
+    \textbf{Associate's in Business}\\Rio Salado Community College\\Tempe, AZ \textbullet{} May 2018
+    \sside{Select Product Achievements}
+    \begin{itemize}[leftmargin=1em,itemsep=3pt]
+      \item Product-managed a System Health Dashboard from concept to launch — real-time hardware insights, $\sim$95\% uptime, fewer escalated support calls.
+      \item Supported new hardware and software products through development, testing, go-to-market, and rollout — 100K+ units and \$400K+ ARR added.
+      \item Led the team behind a full custom ERP for a veterinary lab: portal, order entry, lab-equipment integration, manufacturing, fulfillment, shipping, billing, and accounting.
+    \end{itemize}}}
+
 \begin{document}
 
-{\huge\bfseries Brian Smith}\hfill
-{(623) 565-9402 \;|\; \href{mailto:brian@basmith.net}{brian@basmith.net} \;|\;
-\href{https://www.linkedin.com/in/briansmith111}{linkedin.com/in/briansmith111} \;|\;
-\href{https://basmith.net}{basmith.net}}\par
-\vspace{4pt}
+\sidebarone
 
-{\color{rulegray}\hrule height 0.8pt}
-\vspace{6pt}
+{\huge\bfseries Brian Smith}\par
+\vspace{2pt}
+{\color{accent}\bfseries Senior Solutions Architect \;\textbullet\; Technical Sales \;\textbullet\; Business Consultant}\par
+\vspace{4pt}
 
 A results-driven Senior Solutions Architect and Technical Sales expert with 16 years of experience driving revenue growth through pre-sales and post-sales technical consultation in fast-paced B2B SaaS environments. Proven success in translating complex technical solutions and system architecture into clear business value for C-suite executives and clients. Expertise includes technical demonstrations, crafting compelling RFI/RFP responses, and serving as the key technical liaison between Sales, Product, and Engineering teams to ensure seamless delivery and client adoption.
 
@@ -76,6 +123,8 @@ A results-driven Senior Solutions Architect and Technical Sales expert with 16 y
   \item Spearheaded a customer feedback loop using Jira Service Desk, improving product iteration cycles and aligning roadmaps with real-world needs.
 \end{itemize}
 
+\sidebartwo
+
 \role{OptimumHQ, Mesa, AZ}{Solutions Architect}{Apr 2018 -- Oct 2021}
 {OptimumHQ provides a no-code custom ERP platform for SMBs.}
 \begin{itemize}
@@ -107,27 +156,5 @@ A results-driven Senior Solutions Architect and Technical Sales expert with 16 y
   \item Household finance app with an LLM chat agent (Anthropic API, tool use) that answers questions and performs bulk data operations against a live transaction database.
   \item Meal-planning app with AI-generated recipes and weekly plans; open-source Claude Code tooling and reusable agent skills published on GitHub.
 \end{itemize}
-
-\section{Select Product Achievements}
-\begin{itemize}
-  \item Oversaw development of a System Health Dashboard for enterprise clients, acting as Product Manager from concept through launch — real-time hardware status insights, $\sim$95\% hardware uptime, fewer escalated support calls, and improved customer satisfaction and trust.
-  \item Supported multiple new hardware and software products through development, testing, go-to-market, and rollout, increasing total unit count by 100K+ and annual recurring revenue (ARR) by \$400K+.
-  \item Led the team that created an entire custom ERP for a veterinary lab's testing and treatment products: customer portal, order entry, lab-equipment integration, manufacturing, warehouse fulfillment, shipping, billing, and accounting integration.
-\end{itemize}
-
-\section{Certifications}
-\textbf{Certified Scrum Product Owner (CSPO)}, Scrum Alliance \quad\textbullet\quad \textbf{Certified ScrumMaster (CSM)}, Scrum Alliance
-\begin{itemize}
-  \item Experienced with a variety of project management methodologies — Agile (Scrum, Kanban), Waterfall, and Lean — and how to foster improved teamwork and alignment throughout the project lifecycle.
-\end{itemize}
-
-\section{Education}
-\textbf{Associate's in Business}, Rio Salado Community College, Tempe, AZ \hfill \textbf{May 2018}
-
-\section{Skills}
-Stakeholder Management \textbullet{} Technical Proficiency (Jira, Git, REST APIs, HTML, JS, CSS) \textbullet{} AI-Assisted Development (Claude Code, agentic workflows) \textbullet{} LLM Application Design (Anthropic API, tool use) \textbullet{} Discovery \& Requirements Gathering \textbullet{} PDLC \textbullet{} Agile \& Scrum \textbullet{} Data Analysis \& Reporting (SQL, Excel, BI Tools) \textbullet{} SaaS
-
-\section{Software}
-Jira, Git, Claude Code, Anthropic API, Next.js, PostgreSQL, Prisma, Docker, Vercel, Render, Datadog, Postman, Cloudflare, Domo, Twilio, Swagger, Retool, Splunk, Excel, Access, IBM Cognos BI, IBM SPSS, Unraid
 
 \end{document}
