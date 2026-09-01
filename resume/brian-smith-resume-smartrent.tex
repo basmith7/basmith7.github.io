@@ -31,6 +31,9 @@
 
 \setlist[itemize]{leftmargin=1.2em,itemsep=2pt,parsep=0pt,topsep=3pt,label=\textcolor{accent}{\textbullet}}
 
+% A role (header + bullets) never splits across a page break.
+\newenvironment{roleblock}{\par\begin{minipage}{\textwidth}}{\end{minipage}\par\vspace{7pt}}
+
 \begin{document}
 
 {\huge\bfseries Brian Smith}\hfill
@@ -47,6 +50,7 @@ Solutions Architect with 16 years in B2B SaaS and four in multifamily PropTech â
 
 \section{Experience}
 
+\begin{roleblock}
 \role{Entrata, Lehi, UT}{Senior Business Consultant}{June 2025 -- Present}
 {Entrata is a global leader in property management software, offering a comprehensive SaaS platform that automates workflows for rent payments, leasing, maintenance, and resident communication.}
 \begin{itemize}
@@ -54,7 +58,9 @@ Solutions Architect with 16 years in B2B SaaS and four in multifamily PropTech â
   \item Lead performance analyses of financial results, leasing velocity, and market conditions from large datasets, presenting findings that demonstrate product value to client leadership.
   \item Educate client teams on BI concepts and best practices; define internal consulting processes and documentation with product, engineering, and support.
 \end{itemize}
+\end{roleblock}
 
+\begin{roleblock}
 \role{Pallet, San Francisco, CA}{Senior Solutions Architect}{Sep 2024 -- Mar 2025}
 {Pallet is a modern SaaS, AI-powered logistics platform for transportation and warehouse management.}
 \begin{itemize}
@@ -62,7 +68,9 @@ Solutions Architect with 16 years in B2B SaaS and four in multifamily PropTech â
   \item Wrote and tracked product requirements and user stories for new modules with Product and Engineering, and partnered with C-suite executives at enterprise accounts to align roadmap with their business objectives.
   \item Re-engineered the client onboarding process, cutting onboarding time by 2 months and improving satisfaction and retention.
 \end{itemize}
+\end{roleblock}
 
+\begin{roleblock}
 \role{SmartRent, Scottsdale, AZ}{Senior Solutions Architect}{Oct 2021 -- Sep 2024}
 {Held this Solutions Architect role for three years, serving SmartRent's largest multifamily owners and operators.}
 \begin{itemize}
@@ -73,29 +81,36 @@ Solutions Architect with 16 years in B2B SaaS and four in multifamily PropTech â
   \item Built and managed the customer feedback and escalation queue in Jira Service Desk, prioritizing tickets for internal teams and aligning roadmaps with real-world client needs.
   \item Authored best-practice and process documentation and educated internal and client teams on optimal implementation strategies.
 \end{itemize}
+\end{roleblock}
 
+\begin{roleblock}
 \role{OptimumHQ, Mesa, AZ}{Solutions Architect}{Apr 2018 -- Oct 2021}
 {OptimumHQ provides a no-code custom ERP platform for SMBs.}
 \begin{itemize}
   \item Owned the complete project lifecycle â€” discovery, requirements, solution and system architecture, build, and user acceptance testing â€” for custom ERP implementations, leading small delivery teams and allocating work.
   \item Designed and implemented custom front-end and back-end business workflows for multiple clients on the OptimumHQ low-code platform.
 \end{itemize}
+\end{roleblock}
 
+\begin{roleblock}
 \role{SmartPractice, Phoenix, AZ}{Data Analyst}{Dec 2010 -- Apr 2018}
 {SmartPractice provides patient communications, marketing, and services to dental \& dermatology practices.}
 \begin{itemize}
   \item Designed and developed standard and custom reports/dashboards using Cognos, Excel, Access, and Sybase SQL, providing actionable insights to marketing, data, sales, and product teams.
   \item Increased data accuracy by implementing data validation and quality control processes.
 \end{itemize}
+\end{roleblock}
 
 \section{AI Tools \& Prompt Engineering in Practice}
 
+\begin{roleblock}
 \role{SMARTDraft, \href{https://smartdraft.app}{smartdraft.app}}{Product Owner \& Developer}{2026 -- Present}
 {Solo side project â€” sole owner of product, code, cloud infrastructure, and support.}
 \begin{itemize}
   \item Shipped a real-time fantasy football draft platform used by 100+ drafters in the 2026 season by directing Claude Code AI agents: writing the specs, plans, and review prompts an agent executes against, then verifying the output ($\sim$1{,}150 commits).
   \item Architected live multiplayer draft rooms over WebSockets, a nightly third-party data-ingestion pipeline, and an auto-draft bot on TypeScript, Next.js, and PostgreSQL, deployed on Vercel and Render with CI gates and a controlled release process.
 \end{itemize}
+\end{roleblock}
 
 \textbf{LLM-Powered Tools \& AI Standards}
 \begin{itemize}

@@ -2,10 +2,10 @@
 % Build: xelatex -output-directory=build brian-smith-resume.tex  (run twice)
 \documentclass[10pt,letterpaper]{article}
 
-\usepackage[hmargin=0.9in,vmargin=0.55in]{geometry}
+\usepackage[hmargin=0.85in,vmargin=0.5in]{geometry}
 \usepackage{fontspec}
-\setmainfont{Carlito}[Scale=0.98]
-\linespread{1.03}
+\setmainfont{Carlito}[Scale=0.97]
+\linespread{1.0}
 \usepackage{xcolor}
 \usepackage{titlesec}
 \usepackage{enumitem}
@@ -31,6 +31,9 @@
 
 \setlist[itemize]{leftmargin=1.2em,itemsep=2pt,parsep=0pt,topsep=3pt,label=\textcolor{accent}{\textbullet}}
 
+% A role (header + bullets) never splits across a page break.
+\newenvironment{roleblock}{\par\begin{minipage}{\textwidth}}{\end{minipage}\par\vspace{7pt}}
+
 \begin{document}
 
 {\huge\bfseries Brian Smith}\hfill
@@ -47,6 +50,7 @@ A results-driven Senior Solutions Architect and Technical Sales expert with 16 y
 
 \section{Experience}
 
+\begin{roleblock}
 \role{Entrata, Lehi, UT}{Senior Business Consultant}{June 2025 -- Present}
 {Entrata is a global leader in property management software, offering a comprehensive SaaS platform that automates workflows for rent payments, leasing, maintenance, and resident communication.}
 \begin{itemize}
@@ -56,7 +60,9 @@ A results-driven Senior Solutions Architect and Technical Sales expert with 16 y
   \item Train clients on business intelligence concepts and best practices, enabling self-sufficiency within the Entrata platform.
   \item Collaborate with cross-functional teams (sales, product, engineering, support) to define business consulting processes and improve the client experience.
 \end{itemize}
+\end{roleblock}
 
+\begin{roleblock}
 \role{Pallet, San Francisco, CA}{Senior Solutions Architect}{Sep 2024 -- Mar 2025}
 {Pallet is a modern SaaS, AI-powered logistics platform for transportation and warehouse management.}
 \begin{itemize}
@@ -67,7 +73,9 @@ A results-driven Senior Solutions Architect and Technical Sales expert with 16 y
   \item Partnered with clients and internal stakeholders to optimize onboarding, reducing onboarding time by 2 months and increasing customer satisfaction and retention.
   \item Drove revenue growth by providing critical sales support for a portfolio of clients ranging from \$10K to \$200K ARR, partnering with C-suite executives to align product strategy with key business objectives.
 \end{itemize}
+\end{roleblock}
 
+\begin{roleblock}
 \role{SmartRent, Scottsdale, AZ}{Senior Solutions Architect}{Oct 2021 -- Sep 2024}
 {SmartRent is an enterprise SaaS smart home automation and IoT platform for the multifamily industry.}
 \begin{itemize}
@@ -77,7 +85,9 @@ A results-driven Senior Solutions Architect and Technical Sales expert with 16 y
   \item Drove feature development and rollout of new smart home IoT capabilities across 100K+ units, impacting end-user satisfaction and system performance.
   \item Spearheaded a customer feedback loop using Jira Service Desk, improving product iteration cycles and aligning roadmaps with real-world needs.
 \end{itemize}
+\end{roleblock}
 
+\begin{roleblock}
 \role{OptimumHQ, Mesa, AZ}{Solutions Architect}{Apr 2018 -- Oct 2021}
 {OptimumHQ provides a no-code custom ERP platform for SMBs.}
 \begin{itemize}
@@ -85,16 +95,20 @@ A results-driven Senior Solutions Architect and Technical Sales expert with 16 y
   \item Owned the complete project lifecycle from discovery, design, requirements, and architecture to turning user stories into functional systems.
   \item Designed and implemented custom front-end and back-end business workflows for multiple clients on the OptimumHQ low-code platform.
 \end{itemize}
+\end{roleblock}
 
+\begin{roleblock}
 \role{SmartPractice, Phoenix, AZ}{Data Analyst}{Dec 2010 -- Apr 2018}
 {SmartPractice provides patient communications, marketing, and services to dental \& dermatology practices.}
 \begin{itemize}
   \item Designed and developed standard and custom reports/dashboards using Cognos, Excel, Access, and Sybase SQL, providing actionable insights to marketing, data, sales, and product teams.
   \item Increased data accuracy by implementing data validation and quality control processes.
 \end{itemize}
+\end{roleblock}
 
 \section{AI-Assisted Product Development (Side Projects)}
 
+\begin{roleblock}
 \role{SMARTDraft, \href{https://smartdraft.app}{smartdraft.app}}{Product Owner \& Developer}{2026 -- Present}
 {A solo side project: sole owner of product, code, infrastructure, and support.}
 \begin{itemize}
@@ -103,6 +117,7 @@ A results-driven Senior Solutions Architect and Technical Sales expert with 16 y
   \item Built on TypeScript, Next.js, Node, and PostgreSQL, deployed on Vercel and Render with CI gates, database migrations, and a controlled production release process ($\sim$1{,}150 commits).
   \item Developed by directing Claude Code AI agents — writing the specs, plans, and reviews a coding agent executes against, then verifying the output.
 \end{itemize}
+\end{roleblock}
 
 \textbf{Claude-Powered Internal Tools}
 \begin{itemize}
