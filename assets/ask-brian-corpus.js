@@ -46,7 +46,7 @@
         note: 'Salary was never in the text, so the connections for “salary” stayed random. “brian” takes over and it answers anyway, just as confidently. This is where made-up answers come from, and it is why you should ask him instead.' },
     ],
   };
-  const LIMITS = { maxSentences: 60, maxVocab: 250 };
+  const LIMITS = { maxSentences: 60, maxVocab: 250, maxContext: 3, minPairs: 4 };
 
   // Lowercase, strip punctuation, one sentence per line. Returns { sentences, extra, error }.
   function parseText(text) {
@@ -58,6 +58,11 @@
     if (sentences.length > LIMITS.maxSentences) { out.error = 'Keep it to ' + LIMITS.maxSentences + ' sentences or fewer, or the diagram and training grind to a halt.'; return out; }
     const vocab = new Set(); sentences.forEach((l) => l.split(' ').forEach((w) => vocab.add(w)));
     if (vocab.size > LIMITS.maxVocab) { out.error = 'That is ' + vocab.size + ' distinct words. Keep it under ' + LIMITS.maxVocab + ' so the output layer stays drawable.'; return out; }
+    // Each sentence of W words yields W+1 training pairs; the widest context window (3 words)
+    // needs more pairs than that to have anything to show. Reject too-short input up front
+    // instead of letting the network builder run out of pairs later.
+    const pairCount = sentences.reduce((n, s) => n + s.split(' ').length + 1, 0);
+    if (pairCount <= LIMITS.maxContext) { out.error = 'That is too short to train on. Give it a few more words.'; return out; }
     return out;
   }
 

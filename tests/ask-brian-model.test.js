@@ -41,6 +41,12 @@ test('context length 1 and 3 change the window and the input width', () => {
   assert.equal(m3.W1[0].length, 3 * S3.V);
 });
 
+test('a single short sentence like "hi" produces fewer pairs than a 3-word context window, which is why callers must guard S.pairs[N]', () => {
+  const S = TinyLM.buildSet({ sentences: ['hi'], extra: [] }, 3);
+  assert.ok(S.pairs.length <= 3, 'S.pairs[3] would be undefined for this input, so UI code must not index it directly');
+  assert.equal(S.pairs[3], undefined);
+});
+
 test('paramCount matches the weight and bias shapes', () => {
   const S = TinyLM.buildSet(SMALL, 2);
   const m = TinyLM.initModel(S, () => 0.1);
