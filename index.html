@@ -143,6 +143,79 @@
             <article><h3>Claude-powered household tools</h3><p>Finance tracker with an LLM chat agent (Anthropic API, tool use) that answers questions and bulk-categorizes live transaction data, plus an AI meal planner and open-source Claude Code tooling on GitHub.</p></article>
           </div>
         </section>
+        <section class="projects ask-brian" id="ask-brian" aria-labelledby="ask-brian-heading">
+          <div class="section-heading"><p class="section-label">Live demo</p><h2 id="ask-brian-heading">Ask a <span id="ab-params">7,251</span>-parameter model about Brian</h2></div>
+          <p class="ab-lede">Everything below runs for real, in your browser. The numbers start out random, and pressing Train nudges them with actual backpropagation until the network can rebuild sentences about me that it no longer has a copy of. It is a scale model of how the large ones work.</p>
+
+          <h3>First it reads</h3>
+          <p class="ab-sub">This is the whole training set: <span id="ab-source">my resume as</span> <span id="ab-count">24</span> short sentences. Nothing else ever goes in. It is yours to edit: change a line, add your own, or replace all of it, one sentence per line.</p>
+          <textarea class="ab-text" id="ab-text" rows="10" spellcheck="false" aria-label="Training sentences, one per line"></textarea>
+          <div class="ab-textbar">
+            <button class="ab-btn" id="ab-apply" type="button">Use this text</button>
+            <button class="ab-btn ghost" id="ab-restore" type="button">Reset to my resume</button>
+            <span class="ab-flag" id="ab-custom" hidden>Custom text</span>
+          </div>
+          <p class="ab-err" id="ab-texterr" hidden></p>
+          <p class="ab-sub">The sentences don't go in whole. They get chopped into <span id="ab-npairs">196</span> scraps: a few words of context, and the word that came next. How many words of context is up to you.</p>
+          <div class="ab-ctxbar" role="group" aria-label="Words of context">
+            <button class="ab-ctx" type="button" data-n="1" aria-pressed="false">1 word</button>
+            <button class="ab-ctx" type="button" data-n="2" aria-pressed="true">2 words</button>
+            <button class="ab-ctx" type="button" data-n="3" aria-pressed="false">3 words</button>
+          </div>
+          <div class="ab-pairs" id="ab-pairs"></div>
+
+          <h3>Then it adjusts</h3>
+          <div class="ab-stage">
+            <svg class="ab-net" id="ab-net" viewBox="0 0 360 296" role="img" aria-label="A network of input words, hidden units and output words, with connection strengths drawn as lines"></svg>
+          </div>
+          <div class="ab-readout">
+            <div class="ab-metric"><div class="n" id="ab-epoch">0</div><div class="k">passes over the text</div></div>
+            <div class="ab-metric"><div class="n" id="ab-loss">&mdash;</div><div class="k">how wrong it is</div></div>
+            <svg class="ab-spark" id="ab-spark" viewBox="0 0 150 44" aria-hidden="true"></svg>
+          </div>
+          <div class="ab-controls">
+            <button class="ab-btn" id="ab-train" type="button">Train it a little</button>
+            <button class="ab-btn ghost" id="ab-full" type="button">Train it fully</button>
+            <button class="ab-btn ghost" id="ab-wipe" type="button">Wipe the weights</button>
+          </div>
+          <p class="ab-caption" id="ab-caption"></p>
+
+          <h3>Now ask it something</h3>
+          <p class="ab-sub">Try one before training and you get noise. Then train a little and try again, then train fully and ask the same thing.</p>
+          <div class="ab-temp">
+            <label for="ab-temp">How it picks each word</label>
+            <input type="range" id="ab-temp" min="0" max="1.5" step="0.1" value="0">
+            <span class="ab-templabel" id="ab-templabel"></span>
+          </div>
+          <div class="ab-qs" id="ab-qs"></div>
+          <p class="ab-sub" id="ab-noqs" hidden>None of the ready-made questions fit your text. Use the two dropdowns below to start it off with any words you wrote.</p>
+          <div class="ab-answer">
+            <div class="seed" id="ab-seed">Nothing asked yet</div>
+            <div class="out" id="ab-out">&mdash;</div>
+            <div class="ab-trail" id="ab-trail"></div>
+            <div class="ab-probs" id="ab-probs"></div>
+          </div>
+          <p class="ab-note" id="ab-note"></p>
+
+          <h3>Or drive it yourself</h3>
+          <p class="ab-sub">Give it any two words from its vocabulary. Most combinations were never in the text, and it will still answer.</p>
+          <div class="ab-exp">
+            <select id="ab-s1" aria-label="First context word"></select>
+            <select id="ab-s2" aria-label="Second context word"></select>
+            <span class="arrow">then?</span>
+            <button class="ab-btn ghost" id="ab-go" type="button">Continue it</button>
+          </div>
+
+          <h3>What is real here, and what is not</h3>
+          <p class="ab-sub">Real: the forward pass, the softmax, the cross-entropy loss, the gradients, the weight updates. Every line redrawn during training is an actual number that changed.</p>
+          <ul class="ab-real">
+            <li>This network holds a few thousand numbers. A model you would actually talk to holds hundreds of billions.</li>
+            <li>It sees one, two or three words of context. Real models see thousands and weigh them against each other with attention, which this has none of.</li>
+            <li>The loss never quite reaches zero, and that is correct. "brian was a senior solutions architect at" is followed by two different companies, so the honest answer is a spread, not a single word. Flip to one word of context and the spread gets much wider, because "at" alone could go anywhere.</li>
+            <li>The bars are the real output. The model never produces a word, it produces odds over every word, and something has to pick. Set to "always the top word" it is deterministic. Slide it toward "takes chances" and it samples from the odds instead, which is where the variety in a real model's answers comes from. Train it a little and the odds are spread; train it fully and they collapse toward certainty, because it has memorized the text rather than learned anything general.</li>
+            <li>The part that carries over exactly: once training is done, the sentences are gone. What is left is a pile of numbers that lean the right way, and the answer is rebuilt from scratch every time you ask.</li>
+          </ul>
+        </section>
       </div>
     </div>
     <footer>© Brian Smith <span aria-hidden="true">//</span> Built for humans first.</footer>
@@ -169,5 +242,8 @@
       choices.forEach((choice) => choice.addEventListener('click', () => setTheme(choice.dataset.themeChoice)));
     })();
   </script>
+  <script src="/assets/ask-brian-model.js"></script>
+  <script src="/assets/ask-brian-corpus.js"></script>
+  <script src="/assets/ask-brian.js"></script>
 </body>
 </html>

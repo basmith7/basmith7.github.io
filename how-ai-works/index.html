@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How a model learns and then remembers (baseball edition)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E9EDF1;
+  --panel:#DFE5EB;
+  --ink:#182430;
+  --muted:#6C7A8A;
+  --rule:#C3CDD6;
+  --pos:#00707C;
+  --neg:#6A4FA3;
+  --hot:#B5791A;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light dark;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#121A21;--panel:#1A242E;--ink:#DDE5EC;--muted:#8E9CAB;--rule:#2C3A47;
+    --pos:#35C2CE;--neg:#A98CE8;--hot:#E0A63C;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#121A21;--panel:#1A242E;--ink:#DDE5EC;--muted:#8E9CAB;--rule:#2C3A47;
+  --pos:#35C2CE;--neg:#A98CE8;--hot:#E0A63C;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;font-variant-numeric:tabular-nums;
+  padding:26px 20px 64px;
+}
+.wrap{max-width:660px;margin:0 auto}
+h1,h2,.chip,.btn,.tab,.qbtn,.word,select{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{
+  font-size:clamp(31px,8.4vw,46px);line-height:1.02;font-weight:800;
+  letter-spacing:-.024em;margin:0 0 16px;max-width:15ch;
+}
+h2{font-size:21px;font-weight:700;letter-spacing:-.012em;line-height:1.2;margin:0 0 10px}
+p{margin:0 0 14px;max-width:62ch}
+.lede{font-size:18px;color:var(--ink)}
+.sub{color:var(--muted);font-size:15.5px}
+section{padding:30px 0 4px;border-top:1px solid var(--rule);margin-top:30px}
+section:first-of-type{border-top:0;margin-top:14px;padding-top:6px}
+
+/* data */
+.tabs{display:flex;gap:8px;margin:2px 0 16px;flex-wrap:wrap}
+.tab{
+  font-size:14.5px;font-weight:600;padding:8px 13px;border-radius:999px;cursor:pointer;
+  background:transparent;color:var(--muted);border:1px solid var(--rule);
+}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.lines{margin:0 0 16px;padding:0;list-style:none}
+.lines li{
+  padding:5px 0 5px 15px;border-left:2px solid var(--rule);
+  font-size:16.5px;color:var(--ink);
+}
+.pairs{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.pair{
+  font-size:12.5px;line-height:1.35;border:1px solid var(--rule);border-radius:6px;
+  padding:4px 7px;color:var(--muted);white-space:nowrap;
+}
+.pair b{color:var(--ink);font-weight:600}
+.pair i{font-style:normal;color:var(--hot)}
+
+/* network */
+.stage{background:var(--panel);border-radius:14px;padding:12px 8px 6px;margin:4px 0 12px}
+svg.net{display:block;width:100%;height:auto;max-width:100%}
+.nodelabel{font-family:"Bricolage Grotesque",sans-serif;font-size:11px;font-weight:600;fill:var(--muted)}
+.slotword{font-family:"Bricolage Grotesque",sans-serif;font-size:13px;font-weight:700;fill:var(--ink)}
+.readout{display:flex;gap:22px;align-items:flex-end;flex-wrap:wrap;margin:14px 0 4px}
+.metric{line-height:1.15}
+.metric .n{font-size:26px;font-weight:700;font-family:"Bricolage Grotesque",sans-serif;letter-spacing:-.02em}
+.metric .k{font-size:13px;color:var(--muted)}
+.spark{width:150px;height:44px;flex:0 0 auto}
+.controls{display:flex;gap:9px;flex-wrap:wrap;margin:16px 0 6px}
+.btn{
+  font-size:15px;font-weight:700;padding:11px 18px;border-radius:9px;cursor:pointer;
+  border:1px solid var(--ink);background:var(--ink);color:var(--paper);
+}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn[disabled]{opacity:.42;cursor:default}
+.caption{font-size:15px;color:var(--muted);margin:10px 0 0;min-height:2.9em}
+
+/* ask */
+.qs{display:flex;flex-direction:column;gap:7px;margin:4px 0 18px}
+.qbtn{
+  text-align:left;font-size:15px;font-weight:600;padding:11px 14px;border-radius:9px;cursor:pointer;
+  border:1px solid var(--rule);background:transparent;color:var(--ink);
+}
+.qbtn[aria-pressed="true"]{border-color:var(--hot);box-shadow:inset 3px 0 0 var(--hot)}
+.answer{
+  background:var(--panel);border-radius:12px;padding:16px 16px 14px;margin-bottom:12px;
+}
+.answer .seed,.answer .out{font-family:"Bricolage Grotesque",sans-serif}
+.answer .seed{font-size:13px;color:var(--muted);font-weight:600;margin-bottom:6px}
+.answer .out{font-size:23px;font-weight:700;letter-spacing:-.015em;line-height:1.28;min-height:1.3em}
+.answer .out .given{color:var(--muted)}
+.answer .out .made{color:var(--ink)}
+.answer .out .made.fresh{color:var(--hot)}
+.probs{margin-top:14px;display:none}
+.probs.on{display:block}
+.prow{display:grid;grid-template-columns:78px 1fr 46px;gap:8px;align-items:center;font-size:13px;margin-bottom:5px}
+.prow .w{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;overflow:hidden;text-overflow:ellipsis}
+.bar{height:7px;border-radius:4px;background:var(--rule);overflow:hidden}
+.bar span{display:block;height:100%;background:var(--hot);width:0;transition:width .3s ease}
+.prow .v{color:var(--muted);text-align:right}
+.note{font-size:15px;color:var(--muted);margin:0}
+
+/* experiment */
+.exp{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0 14px}
+select{
+  font-size:15px;font-weight:600;padding:9px 10px;border-radius:8px;
+  border:1px solid var(--rule);background:var(--paper);color:var(--ink);
+}
+.exp .arrow{color:var(--muted);font-size:15px}
+
+ul.plain{padding-left:18px;margin:0 0 14px;max-width:62ch}
+ul.plain li{margin-bottom:7px}
+:focus-visible{outline:2.5px solid var(--hot);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.001ms!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Watch a model learn, then watch it remember</h1>
+<p class="lede">Everything below runs for real. There are 600-odd numbers in this page, they start out random, and pressing the button nudges them with actual backpropagation until the network can rebuild sentences it no longer has a copy of.</p>
+
+<section>
+<h2>First it reads</h2>
+<p class="sub">Pick what it gets to read. This is the whole training set — four sentences.</p>
+<div class="tabs" role="tablist" id="tabs"></div>
+<ul class="lines" id="lines"></ul>
+<p class="sub">The sentences don't go in whole. They get chopped into scraps: two words of context, and the word that came next. That's the only thing it ever sees.</p>
+<div class="pairs" id="pairs"></div>
+</section>
+
+<section>
+<h2>Then it adjusts</h2>
+<div class="stage">
+  <svg class="net" id="net" viewBox="0 0 360 250" role="img" aria-label="A network of input words, hidden units and output words, with connection strengths drawn as lines"></svg>
+</div>
+<div class="readout">
+  <div class="metric"><div class="n" id="mEpoch">0</div><div class="k">passes over the text</div></div>
+  <div class="metric"><div class="n" id="mLoss">—</div><div class="k">how wrong it is</div></div>
+  <svg class="spark" id="spark" viewBox="0 0 150 44" aria-hidden="true"></svg>
+</div>
+<div class="controls">
+  <button class="btn" id="bTrain">Train it</button>
+  <button class="btn ghost" id="bWipe">Wipe the weights</button>
+</div>
+<p class="caption" id="caption">Right now every connection is a random number, so the web is a tangle with no shape. Teal pulls a word toward being next, purple pushes it away. Thickness is how strongly.</p>
+</section>
+
+<section>
+<h2>Now ask it something</h2>
+<p class="sub">Try one before training — you'll get noise. Then train and try again.</p>
+<div class="qs" id="qs"></div>
+<div class="answer">
+  <div class="seed" id="aSeed">Nothing asked yet</div>
+  <div class="out" id="aOut">—</div>
+  <div class="probs" id="probs"></div>
+</div>
+<p class="note" id="aNote">It answers one word at a time. Each word it produces gets fed back in as context for the next one, which is why a single wrong guess early on drags the whole rest of the sentence with it.</p>
+</section>
+
+<section>
+<h2>Or drive it yourself</h2>
+<p class="sub">Give it any two words from its vocabulary and see what it thinks follows. Most combinations were never in the text, and it will still answer.</p>
+<div class="exp">
+  <select id="s1" aria-label="First context word"></select>
+  <select id="s2" aria-label="Second context word"></select>
+  <span class="arrow">then?</span>
+  <button class="btn ghost" id="bGo">Continue it</button>
+</div>
+</section>
+
+<section>
+<h2>What's real here, and what isn't</h2>
+<p>Real: the forward pass, the softmax, the cross-entropy loss, the gradients, the weight updates. Every line you see redrawn during training is an actual number that changed.</p>
+<ul class="plain">
+  <li>This network holds about 600 numbers. A model you'd actually talk to holds hundreds of billions.</li>
+  <li>It sees two words of context. Real models see thousands, and they weigh them against each other with attention, which this has none of.</li>
+  <li>It works in whole words. Real ones work in word fragments, so they can handle words they've never met.</li>
+  <li>On the Diamondbacks set the loss never reaches zero, and that's correct. "the diamondbacks" is followed by two different words in the text, and so is "the stadium", so the honest answer is a spread, not a single word.</li>
+</ul>
+<p>The part that carries over exactly: once training is done, the sentences are gone. Nothing stored them. What's left is a pile of numbers that happen to lean the right way, and the answer gets rebuilt from scratch every time you ask.</p>
+</section>
+
+</div>
+
+<script>
+const SETS = {
+  ballpark: {
+    label: "Ballpark facts",
+    sentences: [
+      "the pitcher throws from the mound",
+      "the batter stands at the plate",
+      "the umpire calls balls and strikes",
+      "the runner steals second base"
+    ],
+    extra: ["salary"],
+    questions: [
+      { q:"Where does the pitcher throw from?", seed:["pitcher","throws"], steps:3,
+        note:"It never stored that sentence. It worked out that after “pitcher throws” the strongest pull is toward “from”, then “throws from” pulls toward “the”, then “from the” toward “mound”." },
+      { q:"Where does the batter stand?", seed:["batter","stands"], steps:3,
+        note:"Three words rebuilt in a row, each one conditioned on the two before it. “the” shows up in every sentence, so “at the” has to carry the whole decision between plate, mound and everything else." },
+      { q:"What does the umpire call?", seed:["umpire","calls"], steps:3,
+        note:"Same network, different second word — and it goes somewhere completely different. The context is doing the steering." },
+      { q:"How much does the pitcher make?", seed:["pitcher","salary"], steps:2,
+        note:"There's nothing about money in the text, so the connections for “salary” were never tuned and stayed random. “pitcher” takes over and it answers anyway, just as confidently. This is where made-up answers come from." }
+    ]
+  },
+  dbacks: {
+    label: "Diamondbacks handbook",
+    sentences: [
+      "the diamondbacks play in phoenix",
+      "the diamondbacks won in two thousand one",
+      "the stadium roof opens at night",
+      "the stadium pool sits behind center"
+    ],
+    extra: ["traded"],
+    questions: [
+      { q:"Where do the Diamondbacks play?", seed:["diamondbacks","play"], steps:2,
+        note:"Watch the next question. “in” appears in two sentences with two different endings, so the word before it has to do the deciding." },
+      { q:"When did they win it all?", seed:["diamondbacks","won"], steps:4,
+        note:"Identical second step, opposite answer. The network is holding “play” vs “won” across a word to tell phoenix from two thousand one." },
+      { q:"Where is the pool?", seed:["pool","sits"], steps:2,
+        note:"Two words, rebuilt from weights. Nothing in here is a lookup table — there's no row that says “pool = behind center” anywhere." },
+      { q:"Who did they trade?", seed:["diamondbacks","traded"], steps:2,
+        note:"No trade was ever mentioned, so “traded” still has its random starting weights. It answers with Diamondbacks-shaped nonsense rather than admitting it doesn't know." }
+    ]
+  }
+};
+
+const H = 10, LR = 0.55, MAXEPOCH = 420;
+let key = "ballpark", S = null, model = null, epoch = 0, lossHist = [], training = false, busy = false;
+
+function buildSet(k){
+  const d = SETS[k];
+  const vocab = [];
+  const add = w => { if(!vocab.includes(w)) vocab.push(w); };
+  d.sentences.forEach(s => s.split(" ").forEach(add));
+  d.extra.forEach(add);
+  const idx = {}; vocab.forEach((w,i)=> idx[w]=i);
+  const pairs = [];
+  d.sentences.forEach(s => {
+    const t = s.split(" ");
+    for(let i=0;i+2<t.length;i++) pairs.push([idx[t[i]], idx[t[i+1]], idx[t[i+2]], [t[i],t[i+1],t[i+2]]]);
+  });
+  return { key:k, def:d, vocab, idx, pairs, V:vocab.length };
+}
+
+function initModel(){
+  const V = S.V, D = 2*V;
+  const r = () => (Math.random()-0.5);
+  model = {
+    W1: Array.from({length:H}, ()=> Array.from({length:D}, r)),
+    b1: new Array(H).fill(0),
+    W2: Array.from({length:V}, ()=> Array.from({length:H}, r)),
+    b2: new Array(V).fill(0)
+  };
+  epoch = 0; lossHist = [];
+}
+
+function forward(i1,i2){
+  const V = S.V, a1 = new Array(H);
+  for(let h=0;h<H;h++){
+    let z = model.b1[h] + model.W1[h][i1] + model.W1[h][V+i2];
+    a1[h] = Math.tanh(z);
+  }
+  const z2 = new Array(V); let mx = -1e9;
+  for(let v=0;v<V;v++){
+    let z = model.b2[v];
+    for(let h=0;h<H;h++) z += model.W2[v][h]*a1[h];
+    z2[v] = z; if(z>mx) mx = z;
+  }
+  let sum = 0; const p = new Array(V);
+  for(let v=0;v<V;v++){ p[v] = Math.exp(z2[v]-mx); sum += p[v]; }
+  for(let v=0;v<V;v++) p[v] /= sum;
+  return { a1, p };
+}
+
+function step(i1,i2,t){
+  const V = S.V, { a1, p } = forward(i1,i2);
+  const dz2 = p.slice(); dz2[t] -= 1;
+  const da1 = new Array(H).fill(0);
+  for(let v=0;v<V;v++){
+    const g = dz2[v];
+    if(Math.abs(g) < 1e-9) continue;
+    for(let h=0;h<H;h++){ da1[h] += g*model.W2[v][h]; model.W2[v][h] -= LR*g*a1[h]; }
+    model.b2[v] -= LR*g;
+  }
+  for(let h=0;h<H;h++){
+    const dz = da1[h]*(1-a1[h]*a1[h]);
+    model.W1[h][i1] -= LR*dz;
+    model.W1[h][V+i2] -= LR*dz;
+    model.b1[h] -= LR*dz;
+  }
+  return -Math.log(Math.max(p[t],1e-9));
+}
+
+function epochOnce(){
+  const order = S.pairs.map((_,i)=>i);
+  for(let i=order.length-1;i>0;i--){ const j=(Math.random()*(i+1))|0; [order[i],order[j]]=[order[j],order[i]]; }
+  let L = 0;
+  order.forEach(i => { const pr = S.pairs[i]; L += step(pr[0],pr[1],pr[2]); });
+  epoch++;
+  return L/S.pairs.length;
+}
+
+/* ---------- drawing ---------- */
+const NS = "http://www.w3.org/2000/svg";
+const net = document.getElementById("net");
+let el = {};
+
+function el_(tag, attrs){ const e = document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); return e; }
+
+let ctx = [0,1];
+
+function buildNet(){
+  net.innerHTML = "";
+  el = { ih:[], ho:[], hid:[], out:[] };
+  const V = S.V;
+  const hx = 176, ox = 330;
+  const hy = h => 26 + h*(198/(H-1));
+  const oy = v => 16 + v*(218/Math.max(1,V-1));
+  const sy = [92,162];
+
+  const gHO = el_("g",{}); net.appendChild(gHO);
+  for(let h=0;h<H;h++){
+    el.ho[h] = [];
+    for(let v=0;v<V;v++){
+      const l = el_("line",{x1:hx,y1:hy(h),x2:ox,y2:oy(v),"stroke-linecap":"round"});
+      gHO.appendChild(l); el.ho[h][v] = l;
+    }
+  }
+  const gIH = el_("g",{}); net.appendChild(gIH);
+  for(let s=0;s<2;s++){
+    el.ih[s] = [];
+    for(let h=0;h<H;h++){
+      const l = el_("line",{x1:96,y1:sy[s],x2:hx,y2:hy(h),"stroke-linecap":"round"});
+      gIH.appendChild(l); el.ih[s][h] = l;
+    }
+  }
+  el.slot = [];
+  for(let s=0;s<2;s++){
+    const g = el_("g",{});
+    const r = el_("rect",{x:4,y:sy[s]-15,width:92,height:30,rx:8,fill:"var(--paper)",stroke:"var(--rule)"});
+    const t = el_("text",{x:50,y:sy[s]+5,"text-anchor":"middle",class:"slotword"});
+    g.appendChild(r); g.appendChild(t); net.appendChild(g);
+    el.slot[s] = {rect:r, text:t};
+  }
+  for(let h=0;h<H;h++){
+    const c = el_("circle",{cx:hx,cy:hy(h),r:7,fill:"var(--paper)",stroke:"var(--rule)","stroke-width":1.2});
+    net.appendChild(c); el.hid[h] = c;
+  }
+  for(let v=0;v<V;v++){
+    const c = el_("circle",{cx:ox,cy:oy(v),r:3.5,fill:"var(--rule)"});
+    net.appendChild(c); el.out[v] = c;
+  }
+  net.appendChild(el_("text",{x:4,y:22,class:"nodelabel"})).textContent = "two words in";
+  net.appendChild(el_("text",{x:150,y:246,class:"nodelabel"})).textContent = "10 hidden units";
+  const t3 = el_("text",{x:356,y:246,class:"nodelabel","text-anchor":"end"});
+  t3.textContent = S.V + " possible next words"; net.appendChild(t3);
+
+  setSlot(0,S.vocab[ctx[0]]); setSlot(1,S.vocab[ctx[1]]);
+  paint();
+}
+
+function setSlot(s,w){ el.slot[s].text.textContent = w; }
+
+function paint(){
+  const V = S.V;
+  for(let s=0;s<2;s++){
+    const base = s===0 ? ctx[0] : V+ctx[1];
+    for(let h=0;h<H;h++){
+      const w = model.W1[h][base];
+      const l = el.ih[s][h];
+      l.setAttribute("stroke", w>=0 ? "var(--pos)" : "var(--neg)");
+      l.setAttribute("stroke-width", Math.min(3.2, 0.35+Math.abs(w)*1.5).toFixed(2));
+      l.setAttribute("stroke-opacity", Math.min(0.85, 0.16+Math.abs(w)*0.5).toFixed(2));
+    }
+  }
+  for(let h=0;h<H;h++){
+    for(let v=0;v<V;v++){
+      const w = model.W2[v][h], l = el.ho[h][v];
+      l.setAttribute("stroke", w>=0 ? "var(--pos)" : "var(--neg)");
+      l.setAttribute("stroke-width", Math.min(2.2, 0.22+Math.abs(w)*0.85).toFixed(2));
+      l.setAttribute("stroke-opacity", Math.min(0.6, 0.05+Math.abs(w)*0.3).toFixed(2));
+    }
+  }
+}
+
+function showActivity(a1,p){
+  for(let h=0;h<H;h++){
+    const a = Math.abs(a1[h]);
+    el.hid[h].setAttribute("r", (5.5+a*4.5).toFixed(2));
+    el.hid[h].setAttribute("fill", a1[h]>=0 ? "var(--pos)" : "var(--neg)");
+    el.hid[h].setAttribute("fill-opacity", (0.15+a*0.85).toFixed(2));
+  }
+  let best = 0; p.forEach((x,i)=>{ if(x>p[best]) best=i; });
+  for(let v=0;v<S.V;v++){
+    el.out[v].setAttribute("r", (2.6+p[v]*7).toFixed(2));
+    el.out[v].setAttribute("fill", v===best ? "var(--hot)" : "var(--ink)");
+    el.out[v].setAttribute("fill-opacity", (0.16+p[v]*0.84).toFixed(2));
+  }
+}
+
+function clearActivity(){
+  for(let h=0;h<H;h++){ el.hid[h].setAttribute("r",7); el.hid[h].setAttribute("fill","var(--paper)"); el.hid[h].setAttribute("fill-opacity",1); }
+  for(let v=0;v<S.V;v++){ el.out[v].setAttribute("r",3.5); el.out[v].setAttribute("fill","var(--rule)"); el.out[v].setAttribute("fill-opacity",1); }
+}
+
+const spark = document.getElementById("spark");
+function drawSpark(){
+  spark.innerHTML = "";
+  if(lossHist.length < 2) return;
+  const mx = Math.max(...lossHist), mn = 0;
+  const n = lossHist.length;
+  const pts = lossHist.map((L,i)=>{
+    const x = (i/(n-1))*146+2;
+    const y = 40 - ((L-mn)/(mx-mn||1))*34;
+    return x.toFixed(1)+","+y.toFixed(1);
+  }).join(" ");
+  spark.appendChild(el_("polyline",{points:pts,fill:"none",stroke:"var(--hot)","stroke-width":2,"stroke-linejoin":"round","stroke-linecap":"round"}));
+}
+
+/* ---------- ui wiring ---------- */
+const $ = id => document.getElementById(id);
+
+function renderData(){
+  $("lines").innerHTML = "";
+  S.def.sentences.forEach(s=>{ const li=document.createElement("li"); li.textContent=s; $("lines").appendChild(li); });
+  $("pairs").innerHTML = "";
+  S.pairs.forEach(p=>{
+    const d = document.createElement("span"); d.className="pair";
+    d.innerHTML = "<b>"+p[3][0]+" "+p[3][1]+"</b> \u2192 <i>"+p[3][2]+"</i>";
+    $("pairs").appendChild(d);
+  });
+  $("qs").innerHTML = "";
+  S.def.questions.forEach((q,i)=>{
+    const b = document.createElement("button");
+    b.className="qbtn"; b.type="button"; b.setAttribute("aria-pressed","false");
+    b.textContent = q.q;
+    b.addEventListener("click", ()=> ask(i));
+    $("qs").appendChild(b);
+  });
+  [ "s1","s2" ].forEach((id,n)=>{
+    const sel = $(id); sel.innerHTML="";
+    S.vocab.forEach((w,i)=>{ const o=document.createElement("option"); o.value=i; o.textContent=w; sel.appendChild(o); });
+    sel.value = n===0 ? S.pairs[0][0] : S.pairs[0][1];
+  });
+}
+
+function updateMetrics(){
+  $("mEpoch").textContent = epoch;
+  $("mLoss").textContent = lossHist.length ? lossHist[lossHist.length-1].toFixed(2) : "—";
+  drawSpark();
+}
+
+const sleep = ms => new Promise(r=>setTimeout(r, prefersStill() ? 0 : ms));
+const prefersStill = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function setCaption(t){ $("caption").textContent = t; }
+
+function reset(full){
+  initModel(); ctx = [S.pairs[0][0], S.pairs[0][1]];
+  buildNet(); clearActivity(); updateMetrics();
+  $("bTrain").textContent = "Train it"; $("bTrain").disabled = false;
+  $("aSeed").textContent = "Nothing asked yet"; $("aOut").textContent = "—";
+  $("probs").className = "probs"; $("probs").innerHTML = "";
+  document.querySelectorAll(".qbtn").forEach(b=>b.setAttribute("aria-pressed","false"));
+  $("aNote").textContent = "It answers one word at a time. Each word it produces gets fed back in as context for the next one, which is why a single wrong guess early on drags the whole rest of the sentence with it.";
+  setCaption(full ? "Wiped. Every connection is a fresh random number again \u2014 whatever it knew is gone, because the numbers were the only place it lived."
+                  : "Right now every connection is a random number, so the web is a tangle with no shape. Teal pulls a word toward being next, purple pushes it away. Thickness is how strongly.");
+}
+
+function train(){
+  if(training || busy) return;
+  training = true;
+  $("bTrain").disabled = true; $("bWipe").disabled = true;
+  clearActivity();
+  setCaption("Training. Each pass runs every scrap through the network, checks how far off the guess was, and pushes every connection a little way toward being less wrong.");
+  const tick = () => {
+    let L = 0;
+    for(let i=0;i<6 && epoch<MAXEPOCH;i++) L = epochOnce();
+    lossHist.push(L);
+    if(lossHist.length > 160) lossHist = lossHist.filter((_,i)=> i%2===0 || i>lossHist.length-40);
+    paint(); updateMetrics();
+    if(epoch < MAXEPOCH){ requestAnimationFrame(tick); }
+    else {
+      training = false;
+      $("bTrain").disabled = false; $("bWipe").disabled = false;
+      $("bTrain").textContent = "Train it again";
+      setCaption("It's settled. The tangle has structure now \u2014 some connections grew thick, most faded toward nothing. That shape is the entire memory. Go ask it something.");
+    }
+  };
+  requestAnimationFrame(tick);
+}
+
+function topK(p,k){
+  return p.map((x,i)=>[x,i]).sort((a,b)=>b[0]-a[0]).slice(0,k);
+}
+
+function renderProbs(p){
+  const box = $("probs"); box.className="probs on"; box.innerHTML="";
+  topK(p,3).forEach(([val,i])=>{
+    const row = document.createElement("div"); row.className="prow";
+    row.innerHTML = '<div class="w">'+S.vocab[i]+'</div><div class="bar"><span></span></div><div class="v">'+Math.round(val*100)+'%</div>';
+    box.appendChild(row);
+    requestAnimationFrame(()=>{ row.querySelector(".bar span").style.width = Math.max(2,val*100)+"%"; });
+  });
+}
+
+async function generate(seedWords, steps, noteText){
+  busy = true;
+  document.querySelectorAll("button").forEach(b=>{ if(b.id!=="bWipe") b.disabled=true; });
+  $("bWipe").disabled = true;
+  const out = $("aOut");
+  out.innerHTML = '<span class="given">'+seedWords[0]+" "+seedWords[1]+"</span>";
+  let i1 = S.idx[seedWords[0]], i2 = S.idx[seedWords[1]];
+  const made = [];
+  for(let s=0;s<steps;s++){
+    ctx = [i1,i2];
+    setSlot(0,S.vocab[i1]); setSlot(1,S.vocab[i2]);
+    paint();
+    await sleep(340);
+    const { a1, p } = forward(i1,i2);
+    showActivity(a1,p);
+    renderProbs(p);
+    await sleep(420);
+    let best = 0; p.forEach((x,k)=>{ if(x>p[best]) best=k; });
+    made.push(S.vocab[best]);
+    out.innerHTML = '<span class="given">'+seedWords[0]+" "+seedWords[1]+'</span> <span class="made">'+
+      made.slice(0,-1).join(" ")+'</span> <span class="made fresh">'+made[made.length-1]+"</span>";
+    await sleep(300);
+    i1 = i2; i2 = best;
+  }
+  out.innerHTML = '<span class="given">'+seedWords[0]+" "+seedWords[1]+'</span> <span class="made">'+made.join(" ")+"</span>";
+  if(noteText) $("aNote").textContent = epoch === 0
+    ? "Untrained, so that's pure noise \u2014 the weights are random and the answer is random with them. Train it and ask again."
+    : noteText;
+  busy = false;
+  document.querySelectorAll("button").forEach(b=> b.disabled=false);
+  if(training) $("bTrain").disabled = true;
+}
+
+function ask(i){
+  if(busy || training) return;
+  const q = S.def.questions[i];
+  document.querySelectorAll(".qbtn").forEach((b,j)=> b.setAttribute("aria-pressed", j===i ? "true":"false"));
+  $("aSeed").textContent = "starting it off with \u201C"+q.seed.join(" ")+"\u201D";
+  generate(q.seed, q.steps, q.note);
+}
+
+$("bTrain").addEventListener("click", train);
+$("bWipe").addEventListener("click", ()=>{ if(training||busy) return; reset(true); });
+$("bGo").addEventListener("click", ()=>{
+  if(busy||training) return;
+  const a = S.vocab[+$("s1").value], b = S.vocab[+$("s2").value];
+  document.querySelectorAll(".qbtn").forEach(x=>x.setAttribute("aria-pressed","false"));
+  $("aSeed").textContent = "starting it off with \u201C"+a+" "+b+"\u201D";
+  const seen = S.pairs.some(p=> S.vocab[p[0]]===a && S.vocab[p[1]]===b);
+  generate([a,b], 2, seen
+    ? "That pairing was in the text, so the network has been pushed to handle it directly."
+    : "Those two words never appeared together in the text. It answered anyway \u2014 there's no mechanism in here for stopping, only for guessing.");
+});
+
+const tabs = $("tabs");
+Object.keys(SETS).forEach(k=>{
+  const b = document.createElement("button");
+  b.className="tab"; b.type="button"; b.setAttribute("role","tab");
+  b.setAttribute("aria-selected", k===key ? "true":"false");
+  b.textContent = SETS[k].label;
+  b.addEventListener("click", ()=>{
+    if(training||busy||k===key) return;
+    key = k; S = buildSet(key);
+    tabs.querySelectorAll(".tab").forEach((t,i)=> t.setAttribute("aria-selected", Object.keys(SETS)[i]===key ? "true":"false"));
+    renderData(); reset(false);
+    setCaption("New text, new vocabulary, so the network starts over from random. Nothing carries across.");
+  });
+  tabs.appendChild(b);
+});
+
+S = buildSet(key);
+renderData();
+reset(false);
+</script>
+</body>
+</html>
