@@ -41,6 +41,7 @@
           <button type="button" class="theme-pill" data-theme-choice="professional" aria-pressed="false">Professional</button>
           <button type="button" class="theme-pill" data-theme-choice="ai-neon" aria-pressed="true">AI Neon</button>
           <button type="button" class="theme-pill" data-theme-choice="hackerman" aria-pressed="false">Hackerman</button>
+          <button type="button" class="theme-pill" data-theme-choice="mfws" aria-pressed="false">MFWS</button>
         </nav>
         <h1>Brian<br>Smith</h1>
         <p class="headline">Senior Business Consultant <span aria-hidden="true">·</span> Solutions Architect <span aria-hidden="true">·</span> Product Partner</p>
@@ -229,7 +230,8 @@
       const portraits = {
         professional: { src: '/images/profile.jpg', alt: 'Brian Smith' },
         'ai-neon': { src: '/images/profile-cyberpunk.png', alt: 'Brian Smith holding Biscuit' },
-        hackerman: { src: '/images/profile-cyberpunk.png', alt: 'Brian Smith holding Biscuit' }
+        hackerman: { src: '/images/profile-cyberpunk.png', alt: 'Brian Smith holding Biscuit' },
+        mfws: { src: '/images/profile.jpg', alt: 'Brian Smith' }
       };
       const setTheme = (theme) => {
         document.documentElement.dataset.theme = theme;
