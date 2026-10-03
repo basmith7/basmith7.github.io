@@ -9,17 +9,18 @@
   else root.KatamariCore = factory();
 })(typeof self !== 'undefined' ? self : this, function () {
   const FIT = 0.5;       // an item sticks if its volume is at most this share of the ball's
-  const GAIN = 1.1;      // how much of an item's volume the ball gains
-  const HOLLOW = 0.02;   // an emptied card or panel is mostly air
+  const GAIN = 0.6;      // how much of an item's volume the ball gains
+  const HOLLOW = 0.05;   // an emptied card or panel is mostly air
+  const THICK = 60;      // page things are flat: depth is the short side, capped here
   const ACCEL = 1500;    // px/s² toward the target
   const GRIP = 1.6;      // friction while steering, per second
   const COAST = 2.6;     // friction while coasting, per second
 
   const ballVolume = (r) => (4 / 3) * Math.PI * r * r * r;
   const radiusFor = (vol) => Math.cbrt(vol * 3 / (4 * Math.PI));
-  const itemVolume = (w, h, hollow) => w * h * Math.min(w, h) * (hollow ? HOLLOW : 1);
+  const itemVolume = (w, h, hollow) => w * h * Math.min(w, h, THICK) * (hollow ? HOLLOW : 1);
   const canPickUp = (ball, vol) => vol <= ballVolume(ball.r) * FIT;
-  const maxSpeed = (r) => 260 + 34 * Math.sqrt(r);
+  const maxSpeed = (r) => 210 + 30 * Math.sqrt(r);
   const drawScale = (r, cap) => (r <= cap ? 1 : cap / r);
 
   function grow(ball, vol) {
@@ -122,7 +123,7 @@
   }
 
   return {
-    FIT, GAIN, HOLLOW, ballVolume, radiusFor, itemVolume, canPickUp, maxSpeed, drawScale, grow,
+    FIT, GAIN, HOLLOW, THICK, ballVolume, radiusFor, itemVolume, canPickUp, maxSpeed, drawScale, grow,
     createBall, step, rotate, normalize, attach, tangentFor, project, circleRect, splitWords, isWord,
     createEmitter,
   };

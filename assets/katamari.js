@@ -162,6 +162,12 @@
     st.overflow = 'hidden';
     st.display = cs.display === 'inline' ? 'inline-block' : (cs.display === 'list-item' ? 'block' : cs.display);
     if (it.kind === 'atom' && cs.display === 'inline') st.whiteSpace = 'nowrap';
+    if (it.kind === 'box') {
+      // An emptied card rides the ball as a bright plank, like the toys in the real game.
+      st.background = DOT_COLORS[(S.count * 3) % DOT_COLORS.length];
+      st.border = '3px solid #fff8ef';
+      st.opacity = '0.92';
+    }
     clone.classList.add('kt-clone');
     return clone;
   }
@@ -216,7 +222,7 @@
     const R = S.drawR, sc = S.scale;
     for (const s of S.stuck) {
       const p = K.project(s.v, R);
-      const half = Math.hypot(s.w, s.h) / 2 * sc;
+      const half = Math.min(Math.hypot(s.w, s.h) / 2 * sc, 1.6 * R);
       const hidden = !p.front && Math.hypot(p.x, p.y) + half < R;
       if (hidden !== s.hidden) { s.hidden = hidden; s.clone.style.display = hidden ? 'none' : ''; }
       if (hidden) continue;
@@ -224,15 +230,18 @@
       const n = Math.hypot(p.x, p.y) || 1;
       let x = p.x + (p.x / n) * out * (1 - Math.abs(p.z)), y = p.y + (p.y / n) * out * (1 - Math.abs(p.z));
       let ang = Math.atan2(s.t[1], s.t[0]);
-      let k = sc * (0.55 + 0.45 * Math.hypot(s.t[0], s.t[1]));
-      let ky = sc;
+      // Nothing on the ball is drawn longer than the ball is wide, or a panel would swallow the view.
+      const fit = Math.min(1, (2.2 * R) / (Math.max(s.w, s.h) * sc));
+      let k = sc * fit * (0.55 + 0.45 * Math.hypot(s.t[0], s.t[1]));
+      let ky = sc * fit;
       const age = (now - s.born) / FLY_MS;
       if (age < 1) {
         const e = 1 - Math.pow(1 - age, 3);
         x = s.fromX + (x - s.fromX) * e; y = s.fromY + (y - s.fromY) * e;
         ang *= e; k = 1 + (k - 1) * e; ky = 1 + (ky - 1) * e;
       }
-      s.clone.style.zIndex = p.front ? 200 + Math.round(p.z * 100) : 100 - Math.round(-p.z * 100);
+      const z = p.front ? 200 + Math.round(p.z * 50) : 100 - Math.round(-p.z * 50);
+      if (z !== s.z) { s.z = z; s.clone.style.zIndex = z; }
       s.clone.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) rotate(${ang.toFixed(3)}rad) scale(${k.toFixed(3)},${ky.toFixed(3)})`;
     }
   }
@@ -277,7 +286,7 @@
         it.seen = stamp;
         if (it.kind === 'box' && it.left > 0) continue;
         if (!K.circleRect(b.x, b.y, R, it.rect)) continue;
-        if (K.canPickUp(b, it.vol)) pickUp(it, now);
+        if (S.unstoppable || K.canPickUp(b, it.vol)) pickUp(it, now);
         else if (!S.tooBig || S.tooBig.it !== it) S.tooBig = { it, until: now + 1400 };
       }
     }
@@ -302,8 +311,10 @@
 
   function frame(now) {
     if (!S) return;
+    const t0 = performance.now();
     const dt = Math.min(0.05, (now - (S.last || now)) / 1000);
     S.last = now;
+    S.frames++;
     const doc = document.documentElement;
     S.scale = K.drawScale(S.ball.r, Math.min(innerWidth, innerHeight) * CAP_SHARE);
     S.drawR = S.ball.r * S.scale;
@@ -311,7 +322,7 @@
     if (roll.angle) {
       for (const s of S.stuck) { s.v = K.rotate(s.v, roll.axis, roll.angle); s.t = K.rotate(s.t, roll.axis, roll.angle); }
       for (const d of S.dots) d.v = K.rotate(d.v, roll.axis, roll.angle);
-      if (++S.frames % 60 === 0) {
+      if (S.frames % 60 === 0) {
         S.stuck.forEach((s) => { s.v = K.normalize(s.v); s.t = K.normalize(s.t); });
         S.dots.forEach((d) => { d.v = K.normalize(d.v); });
       }
@@ -323,6 +334,10 @@
     if (!reduceMotion() || S.pointer || S.keys.size) camera();
     updateHud(now);
     if (S.left === 0 && !endCard) showEnd();
+    // Safety net: if nothing left can ever fit, let the ball take whatever remains.
+    if (S.frames % 30 === 0 && !S.unstoppable && S.left > 0 &&
+        !S.items.some((it) => !it.taken && !(it.kind === 'box' && it.left > 0) && K.canPickUp(S.ball, it.vol))) S.unstoppable = true;
+    S.frameMs = performance.now() - t0;
     S.raf = requestAnimationFrame(frame);
   }
 
@@ -361,7 +376,7 @@
     let msg = S.lastLabel ? `Rolled up: ${S.lastLabel}` : null;
     if (S.tooBig && S.tooBig.until > now) {
       const need = K.radiusFor(S.tooBig.it.vol / K.FIT);
-      msg = `${clip(S.tooBig.it.label)} needs ${sizeText(need).join(' ')}`;
+      msg = `Too big: “${clip(S.tooBig.it.label)}” needs ${sizeText(need).join(' ')}`;
     }
     if (msg && S.shown.msg !== msg) { S.shown.msg = msg; hud.querySelector('.kt-last').textContent = msg; }
     const whole = Math.floor((2 * S.ball.r) / 10);

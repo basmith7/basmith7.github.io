@@ -16,6 +16,11 @@ test('itemVolume favours long thin things and discounts hollow boxes', () => {
   near(K.itemVolume(300, 300, true), K.itemVolume(300, 300) * K.HOLLOW);
 });
 
+test('itemVolume caps the depth so huge blocks stay reachable', () => {
+  assert.equal(K.itemVolume(800, 400), 800 * 400 * K.THICK);
+  assert.equal(K.itemVolume(30, 20), 30 * 20 * 20);
+});
+
 test('canPickUp is inclusive at the FIT boundary', () => {
   const ball = K.createBall({ x: 0, y: 0, r: 20 });
   const limit = K.ballVolume(20) * K.FIT;

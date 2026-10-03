@@ -56,7 +56,7 @@ h1 { margin: 11px 0 7px; font-size: clamp(48px, 8vw, 84px); letter-spacing: -.07
 [data-theme="katamari"] .horizon-grid { opacity: .2; background-image: radial-gradient(circle, rgba(255,228,92,.5) 1.5px, transparent 2px); background-size: 38px 38px; }
 [data-theme="katamari"] .scanlines { display: none; }
 [data-theme="katamari"] .panel { border: 2px solid rgba(255, 228, 92, .35); border-radius: 22px; box-shadow: 0 8px 0 rgba(10, 4, 34, .55), 0 26px 60px rgba(0,0,0,.45); }
-[data-theme="katamari"] .hero::after { border: 0; border-radius: 50%; background: repeating-conic-gradient(#ff5fa2 0 12deg, #ffe45c 12deg 24deg, #7ee0ff 24deg 36deg, #5fd38d 36deg 48deg); opacity: .35; }
+[data-theme="katamari"] .hero::after { border: 0; border-radius: 50%; background: repeating-conic-gradient(#ff5fa2 0 12deg, #ffe45c 12deg 24deg, #7ee0ff 24deg 36deg, #5fd38d 36deg 48deg); opacity: .16; }
 [data-theme="katamari"] h1 { font-weight: 700; letter-spacing: -.03em; text-shadow: 4px 4px 0 #ff5fa2, 8px 8px 0 #3ec1ff; }
 [data-theme="katamari"] .portrait { border: 0; border-radius: 50%; padding: 0; background: #fff; box-shadow: 0 0 0 6px #ffe45c, 0 0 0 12px #ff5fa2, 0 0 0 18px #3ec1ff; transform: none; overflow: hidden; }
 [data-theme="katamari"] .portrait img { border-radius: 50%; }
