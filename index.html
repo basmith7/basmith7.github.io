@@ -41,6 +41,7 @@
           <button type="button" class="theme-pill" data-theme-choice="professional" aria-pressed="false">Professional</button>
           <button type="button" class="theme-pill" data-theme-choice="ai-neon" aria-pressed="true">AI Neon</button>
           <button type="button" class="theme-pill" data-theme-choice="hackerman" aria-pressed="false">Hackerman</button>
+          <button type="button" class="theme-pill" data-theme-choice="weightless" aria-pressed="false">Weightless</button>
         </nav>
         <h1>Brian<br>Smith</h1>
         <p class="headline">Senior Business Consultant <span aria-hidden="true">·</span> Solutions Architect <span aria-hidden="true">·</span> Product Partner</p>
@@ -220,6 +221,7 @@
     </div>
     <footer>© Brian Smith <span aria-hidden="true">//</span> Built for humans first.</footer>
   </main>
+  <script src="/assets/weightless.js"></script>
   <script>
     (() => {
       const choices = [...document.querySelectorAll('[data-theme-choice]')];
@@ -229,7 +231,8 @@
       const portraits = {
         professional: { src: '/images/profile.jpg', alt: 'Brian Smith' },
         'ai-neon': { src: '/images/profile-cyberpunk.png', alt: 'Brian Smith holding Biscuit' },
-        hackerman: { src: '/images/profile-cyberpunk.png', alt: 'Brian Smith holding Biscuit' }
+        hackerman: { src: '/images/profile-cyberpunk.png', alt: 'Brian Smith holding Biscuit' },
+        weightless: { src: '/images/profile.jpg', alt: 'Brian Smith' }
       };
       const setTheme = (theme) => {
         document.documentElement.dataset.theme = theme;
@@ -237,9 +240,34 @@
         portrait.src = portraits[theme].src;
         portrait.alt = portraits[theme].alt;
         localStorage.setItem('resume-theme', theme);
+        if (theme === 'weightless') Weightless.start(); else Weightless.teardown();
+      };
+      // Reveal the new theme in a circle growing out of the pill that was clicked.
+      const revealTheme = (theme, pill) => {
+        if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) return setTheme(theme);
+        const box = pill.getBoundingClientRect();
+        const x = box.left + box.width / 2, y = box.top + box.height / 2;
+        const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+        const transition = document.startViewTransition(() => setTheme(theme));
+        return transition.ready.then(() => document.documentElement.animate(
+          { clipPath: [`circle(0 at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+          { duration: 750, easing: 'cubic-bezier(.65, 0, .35, 1)', pseudoElement: '::view-transition-new(root)' }
+        ).finished);
+      };
+      let busy = false;
+      const chooseTheme = async (theme, pill) => {
+        const current = document.documentElement.dataset.theme;
+        if (busy || theme === current) return;
+        busy = true;
+        try {
+          if (current === 'weightless') await Weightless.settle();
+          await revealTheme(theme, pill);
+        } finally {
+          busy = false;
+        }
       };
       setTheme(availableThemes.includes(savedTheme) ? savedTheme : 'professional');
-      choices.forEach((choice) => choice.addEventListener('click', () => setTheme(choice.dataset.themeChoice)));
+      choices.forEach((choice) => choice.addEventListener('click', () => chooseTheme(choice.dataset.themeChoice, choice)));
     })();
   </script>
   <script src="/assets/ask-brian-model.js"></script>
