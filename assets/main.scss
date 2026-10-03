@@ -147,8 +147,13 @@ wl-word { white-space: nowrap; }
 @media (max-width: 640px) { .ab-prow { grid-template-columns: 80px 1fr 40px; } .ab-answer .out { font-size: 20px; } }
 
 /* ---------- MFWS theme: inspired by motherfuckingwebsite.com ---------- */
-[data-theme="mfws"] { --ink: #fff; --panel: transparent; --cyan: #444; --pink: #ddd; --violet: #444; --text: #444; --muted: #444; }
-[data-theme="mfws"] body { max-width: 650px; margin: 40px auto; padding: 0 10px; overflow: visible; color: #444; font: 18px/1.6 "Times New Roman", Times, serif; }
+[data-theme="mfws"] { --ink: #fff; --panel: transparent; --cyan: #000; --pink: #ddd; --violet: #000; --text: #000; --muted: #000; }
+[data-theme="mfws"] body { max-width: none; margin: 8px; padding: 0; overflow: visible; color: #000; font: 16px "Times New Roman", Times, serif; }
+[data-theme="mfws"] .resume-shell, [data-theme="mfws"] .resume-shell * { text-align: left !important; }
+[data-theme="mfws"] .resume-shell h1 br { display: none; }
+[data-theme="mfws"] .resume-shell p { max-width: none; }
+[data-theme="mfws"] .role-meta span + span::before { content: " · "; }
+[data-theme="mfws"] .ab-net { margin: 0; }
 [data-theme="mfws"] .resume-shell * { color: inherit !important; font-family: inherit !important; text-shadow: none !important; box-shadow: none !important; letter-spacing: normal !important; text-transform: none !important; border-radius: 0 !important; backdrop-filter: none !important; }
 [data-theme="mfws"] .resume-shell :not(svg):not(svg *):not(h1):not(h2):not(h3) { font-size: inherit !important; }
 [data-theme="mfws"] .resume-shell a { color: #0000ee !important; }
@@ -159,7 +164,7 @@ wl-word { white-space: nowrap; }
 [data-theme="mfws"] .hero { display: block; min-height: 0; overflow: visible; }
 [data-theme="mfws"] .hero-copy > * { margin-top: 0; margin-bottom: 1em; }
 [data-theme="mfws"] .resume-grid { display: block; margin-top: 0; }
-[data-theme="mfws"] .impact-strip { margin: 0 0 1em; background: none; gap: 1em; }
+[data-theme="mfws"] .impact-strip { display: block; margin: 0 0 1em; background: none; }
 [data-theme="mfws"] .impact-strip article { text-align: left; }
 [data-theme="mfws"] .impact-strip span { display: inline; margin: 0; }
 [data-theme="mfws"] .sidebar section + section, [data-theme="mfws"] .content section + section { margin-top: 1.5em; }
