@@ -72,7 +72,7 @@ h1 { margin: 11px 0 7px; font-size: clamp(48px, 8vw, 84px); letter-spacing: -.07
 kt-w { display: inline; }
 .kt-taken { visibility: hidden; }
 .kt-taken .theme-picker { visibility: visible; }
-html.kt-playing, html.kt-playing body { touch-action: none; -webkit-user-select: none; user-select: none; }
+html.kt-playing, html.kt-playing body { touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 html.kt-playing main { cursor: grab; }
 html.kt-playing main:active { cursor: grabbing; }
 .kt-ball { position: absolute; z-index: 40; top: 0; left: 0; width: 0; height: 0; pointer-events: none; will-change: transform; }
@@ -92,7 +92,7 @@ html.kt-playing main:active { cursor: grabbing; }
 .kt-actions button:hover, .kt-actions button:focus-visible { transform: translateY(-1px); outline: 2px solid #fff; outline-offset: 2px; }
 .kt-actions button:active { transform: translateY(2px); box-shadow: none; }
 .kt-sr { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.kt-end { position: fixed; z-index: 1001; left: 50%; top: 50%; width: min(440px, calc(100% - 32px)); transform: translate(-50%, -50%); padding: 28px 28px 24px; border-radius: 28px; text-align: center; background: #1a1042; box-shadow: 0 0 0 4px #ff5fa2, 0 0 0 8px #ffe45c, 0 0 0 12px #3ec1ff, 0 0 0 16px #5fd38d, 0 30px 80px rgba(0,0,0,.6); animation: kt-pop .5s cubic-bezier(.2, 1.6, .4, 1) both; }
+.kt-end { position: fixed; z-index: 1001; max-height: calc(100dvh - 24px); overflow: auto; left: 50%; top: 50%; width: min(440px, calc(100% - 32px)); transform: translate(-50%, -50%); padding: 28px 28px 24px; border-radius: 28px; text-align: center; background: #1a1042; box-shadow: 0 0 0 4px #ff5fa2, 0 0 0 8px #ffe45c, 0 0 0 12px #3ec1ff, 0 0 0 16px #5fd38d, 0 30px 80px rgba(0,0,0,.6); animation: kt-pop .5s cubic-bezier(.2, 1.6, .4, 1) both; }
 .kt-end h2 { margin: 6px 0 10px; font-size: 30px; line-height: 1.05; color: #ffe45c; text-shadow: 3px 3px 0 #ff5fa2; }
 .kt-end p { margin: 6px 0; color: #d8ccf5; }
 .kt-end a { color: #7ee0ff; font-weight: 700; }

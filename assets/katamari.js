@@ -30,6 +30,7 @@
   let S = null;              // live game state; null when not running
   let hud = null, endCard = null, opts = {};
   let running = false;
+  let pushed = false, backPending = false, opener = null;
 
   // ---------- page → pickables ----------
 
@@ -224,7 +225,7 @@
       const p = K.project(s.v, R);
       const half = Math.min(Math.hypot(s.w, s.h) / 2 * sc, 1.6 * R);
       const hidden = !p.front && Math.hypot(p.x, p.y) + half < R;
-      if (hidden !== s.hidden) { s.hidden = hidden; s.clone.style.display = hidden ? 'none' : ''; }
+      if (hidden !== s.hidden) { s.hidden = hidden; s.clone.style.display = hidden ? 'none' : s.display; }
       if (hidden) continue;
       const out = Math.min(s.w, s.h) * 0.3 * sc;
       const n = Math.hypot(p.x, p.y) || 1;
@@ -261,7 +262,7 @@
     const t = K.tangentFor(v, (Math.random() - 0.5) * 1.05);
     const midX = (it.rect.left + it.rect.right) / 2 - b.x, midY = (it.rect.top + it.rect.bottom) / 2 - b.y;
     S.ballEl.appendChild(clone);
-    S.stuck.push({ clone, v, t, w: it.w, h: it.h, born: now, fromX: midX, fromY: midY, hidden: false });
+    S.stuck.push({ clone, display: clone.style.display, v, t, w: it.w, h: it.h, born: now, fromX: midX, fromY: midY, hidden: false });
     if (S.stuck.length > MAX_CLONES) {
       let i = S.stuck.findIndex((s) => s.v[2] < 0 && now - s.born > FLY_MS);
       if (i < 0) i = 0;
@@ -388,6 +389,7 @@
     endCard = document.createElement('div');
     endCard.className = 'kt-end';
     endCard.setAttribute('role', 'dialog');
+    endCard.setAttribute('aria-modal', 'true');
     endCard.setAttribute('aria-label', 'You rolled up the whole résumé');
     endCard.innerHTML = `
       <p class="kt-end-kicker">Royal rating: magnificent</p>
@@ -411,33 +413,44 @@
 
   const handlers = {
     pointerdown(e) {
-      if (!S || onUi(e.target) || (e.pointerType === 'mouse' && e.button !== 0)) return;
+      if (!S || S.pointer || !e.isPrimary || onUi(e.target) || (e.pointerType === 'mouse' && e.button !== 0)) return;
       S.pointer = { x: e.clientX, y: e.clientY, id: e.pointerId };
       e.preventDefault();
     },
     pointermove(e) { if (S && S.pointer && S.pointer.id === e.pointerId) { S.pointer.x = e.clientX; S.pointer.y = e.clientY; } },
     pointerup(e) { if (S && S.pointer && S.pointer.id === e.pointerId) S.pointer = null; },
     pointercancel(e) { handlers.pointerup(e); },
-    click(e) { if (!onUi(e.target) && e.target.closest && e.target.closest('main')) { e.preventDefault(); e.stopPropagation(); } },
+    click(e) { if (S && !onUi(e.target) && e.target.closest && e.target.closest('main')) { e.preventDefault(); e.stopPropagation(); } },
     keydown(e) {
+      if (e.key === 'Tab' && endCard) {
+        const f = [...endCard.querySelectorAll('a, button')];
+        const i = f.indexOf(document.activeElement);
+        const next = e.shiftKey ? (i <= 0 ? f.length - 1 : i - 1) : (i === f.length - 1 ? 0 : i + 1);
+        f[next].focus(); e.preventDefault(); return;
+      }
       if (e.key === 'Escape') { e.preventDefault(); exit(); return; }
       if (!S || typing(e.target) || !KEYS[e.key]) return;
       S.keys.add(KEYS[e.key]); e.preventDefault();
     },
     keyup(e) { if (S && KEYS[e.key]) S.keys.delete(KEYS[e.key]); },
     blur() { if (S) { S.keys.clear(); S.pointer = null; } },
-    popstate() { if (running) exit(); },
+    popstate() {
+      // Our own history.back() from a previous stop() landing: push this game's entry now if waiting.
+      if (backPending) { backPending = false; if (running && !pushed) { history.pushState({ katamari: true }, ''); pushed = true; } return; }
+      if (running) exit();
+    },
     resize() { clearTimeout(handlers.t); handlers.t = setTimeout(remeasure, 200); },
   };
   const listen = (on) => {
     const m = on ? 'addEventListener' : 'removeEventListener';
     ['pointerdown', 'pointermove', 'pointerup', 'pointercancel', 'click', 'keydown', 'keyup'].forEach((n) => document[m](n, handlers[n], true));
-    ['blur', 'popstate', 'resize'].forEach((n) => window[m](n, handlers[n]));
+    ['blur', 'resize'].forEach((n) => window[m](n, handlers[n]));
   };
 
   // ---------- lifecycle ----------
 
   function begin() {
+    document.documentElement.classList.add('kt-playing');
     const shell = document.querySelector('main.resume-shell');
     const splits = splitWords(shell);
     const items = collect(shell);
@@ -465,6 +478,7 @@
   function teardown() {
     if (!S) return;
     cancelAnimationFrame(S.raf);
+    document.documentElement.classList.remove('kt-playing');
     S.observer.disconnect();
     S.ballEl.remove();
     S.items.forEach((it) => {
@@ -480,10 +494,11 @@
     if (running) return;
     running = true;
     opts = o || {};
-    document.documentElement.classList.add('kt-playing');
     buildHud();
     listen(true);
-    history.pushState({ katamari: true }, '');
+    opener = document.activeElement;
+    pushed = false;
+    if (!backPending) { history.pushState({ katamari: true }, ''); pushed = true; }
     if (reduceMotion()) hud.querySelector('.kt-start').hidden = false;
     else begin();
   }
@@ -496,11 +511,17 @@
     clearTimeout(handlers.t);
     if (hud) { hud.remove(); hud = null; }
     document.documentElement.classList.remove('kt-playing');
-    if (history.state && history.state.katamari) history.back();
+    if (pushed && history.state && history.state.katamari) { backPending = true; history.back(); }
+    pushed = false;
+    if (opener && opener.isConnected && document.activeElement === document.body) opener.focus({ preventScroll: true });
+    opener = null;
   }
 
-  function exit() { if (opts.onExit) opts.onExit(); else stop(); }
-  function reset() { if (!running) return; teardown(); hud.querySelector('.kt-start').hidden = true; begin(); }
+  function exit() { try { if (opts.onExit) opts.onExit(); } finally { stop(); } }
+  function reset() { if (!running || !S) return; teardown(); hud.querySelector('.kt-start').hidden = true; begin(); }
+
+  // Always listening: a history.back() from stop() can land after the game has ended.
+  window.addEventListener('popstate', handlers.popstate);
 
   window.Katamari = {
     start, stop,

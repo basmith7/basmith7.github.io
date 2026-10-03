@@ -41,7 +41,7 @@ UMD like `ask-brian-model.js`: `module.exports` in Node, `window.KatamariCore` i
 ### `assets/katamari.js`: DOM layer, `window.Katamari = { start, stop, running }`
 
 **Collecting pickables** (`start`): one generic walk of `main.resume-shell`.
-- **Skipped:** the theme picker, `aria-hidden` elements, `script`, and anything with a 0×0 rect.
+- **Skipped:** the theme picker, `script`, `style`, `template`, `[hidden]`, and anything with a 0×0 rect. Decorative `aria-hidden` separators inside the résumé (`//`, `·`) are visible, so they stay pickable.
 - **Atoms** are taken whole and not descended into: `a`, `button`, `img`, `svg`, `input`, `textarea`, `select`, `.skill-list li`, `strong` in the impact strip, and every direct child of `#ask-brian`. The demo rewrites its own text, so its words are never split. Its network SVG is cloned shallow, as an empty box, because a deep clone would carry about 2,700 lines.
 - **Words:** every other non-blank text node is split with `splitWords` into `<kt-w>` elements plus whitespace text nodes. `kt-w` is an unstyled custom tag that is inline by default, so rules like `.impact-strip span` don't match it. Each split is recorded as `{parent, original, inserted[]}` for an exact restore.
 - **Boxes:** elements with a visible background, border or shadow (panels, cards, impact articles, the hero, roles with their left rule). A box becomes pickable only once every pickable inside it is taken. It then counts as hollow, and its clone is shallow: an empty card flying around the ball. Plain wrappers with no visual box are never picked up; they just end up empty.
@@ -152,6 +152,21 @@ A timer, goal sizes, "SIZE UP!" at radius thresholds and a "FEVER" streak can al
 
 - Fixed: the inline script referenced `Katamari` before it loaded; word `span`s reflowed the impact strip; Exit returned to the theme from page load; a trailing `popstate` overrode a pill the user had just picked; clones were focusable and clickable with duplicate IDs; clones lost their contextual look; panels could never be picked up; the double counting between containers and their children; stale rects; arrow keys scrolled the page; the 2,700-line SVG; the browser check had no runner.
 - The "the sphere is the cost centre" finding is resolved differently: the per-item 3D vectors cost a few multiplications per frame. The DOM transform writes are the real cost, and they exist under any design. That cost is bounded by the 160-clone cap.
+
+### Implementation review
+*DeepSeek, 2026-10-02 (Fable timed out twice on the diff). Folded in.*
+
+- **Fixed:**
+  - with reduced motion, clicks and touch scrolling were blocked before Start;
+  - `exit()` now always reaches `stop()`, even if `onExit` throws;
+  - a stale `history.back()` could close a newly started game. A pending back is now tracked, and the new game's entry is pushed once it lands;
+  - clones lost their frozen `display` after swinging around the back of the ball;
+  - a second finger broke steering. Only the primary pointer steers now;
+  - the end card is now `aria-modal`, traps Tab, and focus returns to the pill on exit;
+  - iOS long-press callouts are now suppressed;
+  - the end card scrolls on short screens;
+  - Reset did something before Start.
+- **Rejected:** "skip `aria-hidden`". The visible separators should roll up like everything else, so the spec was updated to match.
 
 ### If we started over
 *Accretion review, Fable, 2026-10-02. Advisory.*
