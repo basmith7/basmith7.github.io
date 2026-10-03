@@ -342,6 +342,52 @@
     S.raf = requestAnimationFrame(frame);
   }
 
+  // ---------- music ----------
+  // Loops while a game is on; fades in on begin() and out on stop(). Browsers only allow play()
+  // during a user gesture, so the Katamari pill click starts it silently (see prime below).
+
+  const MUSIC_SRC = '/assets/katamari-on-the-rocks.mp3';
+  const MUSIC_VOL = 0.45;
+  const MUTE_KEY = 'katamari-muted';
+  let music = null, fadeRaf = 0;
+  const muted = () => { try { return localStorage.getItem(MUTE_KEY) === '1'; } catch (e) { return false; } };
+
+  function track() {
+    if (!music) { music = new Audio(MUSIC_SRC); music.loop = true; music.volume = 0; }
+    return music;
+  }
+  function play() { const p = track().play(); if (p && p.catch) p.catch(() => {}); }
+  function fadeTo(target, ms, then) {
+    cancelAnimationFrame(fadeRaf);
+    const a = track(), from = a.volume, t0 = performance.now();
+    const tick = (now) => {
+      const k = Math.max(0, Math.min(1, (now - t0) / ms));
+      a.volume = from + (target - from) * k;
+      if (k < 1) fadeRaf = requestAnimationFrame(tick); else if (then) then();
+    };
+    fadeRaf = requestAnimationFrame(tick);
+  }
+  function musicOn() {
+    if (!S || muted() || document.hidden) return;
+    play();
+    fadeTo(MUSIC_VOL, 900);
+  }
+  function musicOff(rewind) {
+    if (!music) return;
+    fadeTo(0, 450, () => { music.pause(); if (rewind) music.currentTime = 0; });
+  }
+  function toggleMute() {
+    try { localStorage.setItem(MUTE_KEY, muted() ? '0' : '1'); } catch (e) { /* storage blocked: mute for this game only */ }
+    showMute();
+    if (muted()) musicOff(false); else musicOn();
+  }
+  function showMute() {
+    const b = hud && hud.querySelector('.kt-mute');
+    if (!b) return;
+    b.textContent = muted() ? '🔇' : '🔊';
+    b.setAttribute('aria-pressed', String(!muted()));
+  }
+
   // ---------- HUD ----------
 
   const sizeText = (r) => { const cm = (2 * r) / 10; return cm >= 100 ? [(cm / 100).toFixed(2), 'm'] : [cm.toFixed(1), 'cm']; };
@@ -359,12 +405,15 @@
         <button type="button" class="kt-start" hidden>Start rolling</button>
         <button type="button" class="kt-reset">Reset</button>
         <button type="button" class="kt-exit" aria-label="Exit Katamari">✕ Exit</button>
+        <button type="button" class="kt-mute" aria-label="Music"></button>
       </div>
       <p class="kt-sr" aria-live="polite"></p>`;
     hud.querySelector('.kt-reset').addEventListener('click', reset);
     hud.querySelector('.kt-exit').addEventListener('click', exit);
+    hud.querySelector('.kt-mute').addEventListener('click', toggleMute);
     hud.querySelector('.kt-start').addEventListener('click', () => { hud.querySelector('.kt-start').hidden = true; begin(); });
     document.body.appendChild(hud);
+    showMute();
   }
 
   function updateHud(now) {
@@ -449,12 +498,12 @@
 
   // ---------- lifecycle ----------
 
-  // Start on the on-screen word nearest the middle, so the very first roll picks something up.
+  // Start on the on-screen word nearest the middle that the new ball can take, so the first roll picks it up.
   function startSpot(items) {
     const cx = scrollX + innerWidth / 2, cy = scrollY + innerHeight * 0.55;
     let best = { x: cx, y: cy }, bd = Infinity;
     for (const it of items) {
-      if (it.el.tagName !== 'KT-W') continue;
+      if (it.el.tagName !== 'KT-W' || !K.canPickUp({ r: START_R }, it.vol)) continue;
       const x = (it.rect.left + it.rect.right) / 2, y = (it.rect.top + it.rect.bottom) / 2;
       if (y < scrollY + 80 || y > scrollY + innerHeight - 40) continue;
       const d = Math.hypot(x - cx, y - cy);
@@ -486,8 +535,14 @@
     S.emitter.on('pickup', (p) => { S.lastLabel = p.label; });
     S.observer = new ResizeObserver(handlers.resize);
     S.observer.observe(shell);
-    if (document.fonts) document.fonts.ready.then(() => { if (S) remeasure(); });
+    // Web fonts arriving move the words: re-measure, and re-place the ball if it hasn't rolled yet.
+    if (document.fonts) document.fonts.ready.then(() => {
+      if (!S) return;
+      remeasure();
+      if (S.count === 0 && !S.ball.vx && !S.ball.vy) Object.assign(S.ball, startSpot(S.items));
+    });
     S.raf = requestAnimationFrame(frame);
+    musicOn();
   }
 
   function teardown() {
@@ -525,6 +580,7 @@
     listen(false);
     clearTimeout(handlers.t);
     if (hud) { hud.remove(); hud = null; }
+    musicOff(true);
     document.documentElement.classList.remove('kt-playing');
     if (pushed && history.state && history.state.katamari) { backPending = true; history.back(); }
     pushed = false;
@@ -537,6 +593,18 @@
 
   // Always listening: a history.back() from stop() can land after the game has ended.
   window.addEventListener('popstate', handlers.popstate);
+  // Prime the music inside the pill click itself: the game starts a moment later, after the theme
+  // transition, by which time Safari no longer counts it as a user gesture.
+  document.addEventListener('click', (e) => {
+    if (running || muted() || reduceMotion() || !e.target.closest || !e.target.closest('[data-theme-choice="katamari"]')) return;
+    track().volume = 0;
+    play();
+    setTimeout(() => { if (!running || !S) musicOff(true); }, 2500);
+  }, true);
+  document.addEventListener('visibilitychange', () => {
+    if (!music) return;
+    if (document.hidden) music.pause(); else musicOn();
+  });
 
   window.Katamari = {
     start, stop,
@@ -544,6 +612,7 @@
     // For tests and the curious: the live state, and a way to roll everything up at once.
     debug: {
       state: () => S,
+      music: () => music,
       eatAll() { if (!S) return; let more = true; while (more) { more = false; for (const it of S.items) if (!it.taken && !(it.kind === 'box' && it.left > 0)) { pickUp(it, performance.now()); more = true; } } },
     },
   };

@@ -101,6 +101,7 @@ html.kt-playing main:active { cursor: grabbing; }
 .kt-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
 .kt-actions button { flex: 1 1 auto; border: 0; border-radius: 999px; padding: 8px 12px; cursor: pointer; font: 700 13px/1 "Fredoka", "Space Grotesk", sans-serif; color: #1a1042; background: #ffe45c; box-shadow: 0 3px 0 #b8941a; }
 .kt-actions .kt-exit, .kt-actions .kt-back { background: #ff9fd0; box-shadow: 0 3px 0 #c2437f; }
+.kt-actions .kt-mute { flex: 0 0 auto; padding: 8px 10px; background: #7ee0ff; box-shadow: 0 3px 0 #2f8fb3; }
 .kt-actions .kt-start { flex-basis: 100%; background: #5fd38d; box-shadow: 0 3px 0 #2c8f55; }
 .kt-actions button:hover, .kt-actions button:focus-visible { transform: translateY(-1px); outline: 2px solid #fff; outline-offset: 2px; }
 .kt-actions button:active { transform: translateY(2px); box-shadow: none; }
