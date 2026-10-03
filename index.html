@@ -17,7 +17,7 @@
   <link rel="icon" href="/images/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/main.css">
 </head>
 <body>
@@ -43,6 +43,7 @@
           <button type="button" class="theme-pill" data-theme-choice="hackerman" aria-pressed="false">Hackerman</button>
           <button type="button" class="theme-pill" data-theme-choice="mfws" aria-pressed="false">MFWS</button>
           <button type="button" class="theme-pill" data-theme-choice="weightless" aria-pressed="false">Weightless</button>
+          <button type="button" class="theme-pill" data-theme-choice="katamari" aria-pressed="false">Katamari</button>
         </nav>
         <h1>Brian <br>Smith</h1>
         <p class="headline">Senior Business Consultant <span aria-hidden="true">·</span> Solutions Architect <span aria-hidden="true">·</span> Product Partner</p>
@@ -225,23 +226,42 @@
   <script>
     (() => {
       const choices = [...document.querySelectorAll('[data-theme-choice]')];
-      const savedTheme = localStorage.getItem('resume-theme');
-      const availableThemes = choices.map((choice) => choice.dataset.themeChoice);
       const portrait = document.querySelector('.portrait img');
-      const portraits = {
-        professional: { src: '/images/profile.jpg', alt: 'Brian Smith' },
-        'ai-neon': { src: '/images/profile-cyberpunk.png', alt: 'Brian Smith holding Biscuit' },
-        hackerman: { src: '/images/profile-cyberpunk.png', alt: 'Brian Smith holding Biscuit' },
-        mfws: { src: '/images/profile.jpg', alt: 'Brian Smith' },
-        weightless: { src: '/images/profile.jpg', alt: 'Brian Smith' }
+      const plain = { src: '/images/profile.jpg', alt: 'Brian Smith' };
+      const cyber = { src: '/images/profile-cyberpunk.png', alt: 'Brian Smith holding Biscuit' };
+      // persist: false themes are never remembered; onEnter/onLeave run when switching to/from them.
+      // Katamari's script loads after this one (defer), so look it up only when it is needed.
+      const themes = {
+        professional: { portrait: plain },
+        'ai-neon': { portrait: cyber },
+        hackerman: { portrait: cyber },
+        mfws: { portrait: plain },
+        weightless: { portrait: plain, onEnter: () => Weightless.start(), onLeave: () => Weightless.teardown() },
+        katamari: {
+          portrait: plain,
+          persist: false,
+          onEnter: () => window.Katamari ? window.Katamari.start({ onExit: () => setTheme(storedTheme()) })
+                                         : console.warn('Katamari did not load; showing the skin only.'),
+          onLeave: () => window.Katamari && window.Katamari.stop()
+        }
       };
+      const storedTheme = () => {
+        const saved = localStorage.getItem('resume-theme');
+        return themes[saved] && themes[saved].persist !== false ? saved : 'professional';
+      };
+      let current = null;
       const setTheme = (theme) => {
+        if (theme === current) return;
+        const leaving = themes[current];
+        current = theme;
+        if (leaving && leaving.onLeave) leaving.onLeave();
+        const entry = themes[theme];
         document.documentElement.dataset.theme = theme;
         choices.forEach((choice) => choice.setAttribute('aria-pressed', String(choice.dataset.themeChoice === theme)));
-        portrait.src = portraits[theme].src;
-        portrait.alt = portraits[theme].alt;
-        localStorage.setItem('resume-theme', theme);
-        if (theme === 'weightless') Weightless.start(); else Weightless.teardown();
+        portrait.src = entry.portrait.src;
+        portrait.alt = entry.portrait.alt;
+        if (entry.persist !== false) localStorage.setItem('resume-theme', theme);
+        if (entry.onEnter) entry.onEnter();
       };
       // Reveal the new theme in a circle growing out of the pill that was clicked.
       const revealTheme = (theme, pill) => {
@@ -257,7 +277,6 @@
       };
       let busy = false;
       const chooseTheme = async (theme, pill) => {
-        const current = document.documentElement.dataset.theme;
         if (busy || theme === current) return;
         busy = true;
         try {
@@ -267,12 +286,14 @@
           busy = false;
         }
       };
-      setTheme(availableThemes.includes(savedTheme) ? savedTheme : 'professional');
+      setTheme(storedTheme());
       choices.forEach((choice) => choice.addEventListener('click', () => chooseTheme(choice.dataset.themeChoice, choice)));
     })();
   </script>
   <script src="/assets/ask-brian-model.js"></script>
   <script src="/assets/ask-brian-corpus.js"></script>
   <script src="/assets/ask-brian.js"></script>
+  <script src="/assets/katamari-core.js" defer></script>
+  <script src="/assets/katamari.js" defer></script>
 </body>
 </html>
