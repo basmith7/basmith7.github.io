@@ -41,6 +41,7 @@
           <button type="button" class="theme-pill" data-theme-choice="professional" aria-pressed="false">Professional</button>
           <button type="button" class="theme-pill" data-theme-choice="ai-neon" aria-pressed="true">AI Neon</button>
           <button type="button" class="theme-pill" data-theme-choice="hackerman" aria-pressed="false">Hackerman</button>
+          <button type="button" class="theme-pill" data-theme-choice="mfws" aria-pressed="false">MFWS</button>
           <button type="button" class="theme-pill" data-theme-choice="weightless" aria-pressed="false">Weightless</button>
         </nav>
         <h1>Brian<br>Smith</h1>
@@ -51,7 +52,6 @@
           <a href="https://www.linkedin.com/in/briansmith111">LinkedIn</a>
           <a href="https://github.com/basmith7">GitHub</a>
           <a href="/assets/brian-smith-resume.pdf" download>Download detailed résumé</a>
-          <button class="print-link" type="button" onclick="window.print()">Print / Save PDF</button>
         </div>
       </div>
       <figure class="portrait"><img src="/images/profile.jpg" alt="Brian Smith"></figure>
@@ -219,7 +219,7 @@
         </section>
       </div>
     </div>
-    <footer>© Brian Smith <span aria-hidden="true">//</span> Built for humans first.</footer>
+    <footer>© Brian Smith</footer>
   </main>
   <script src="/assets/weightless.js"></script>
   <script>
@@ -232,6 +232,7 @@
         professional: { src: '/images/profile.jpg', alt: 'Brian Smith' },
         'ai-neon': { src: '/images/profile-cyberpunk.png', alt: 'Brian Smith holding Biscuit' },
         hackerman: { src: '/images/profile-cyberpunk.png', alt: 'Brian Smith holding Biscuit' },
+        mfws: { src: '/images/profile.jpg', alt: 'Brian Smith' },
         weightless: { src: '/images/profile.jpg', alt: 'Brian Smith' }
       };
       const setTheme = (theme) => {
