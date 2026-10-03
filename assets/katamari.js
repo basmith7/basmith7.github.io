@@ -449,6 +449,20 @@
 
   // ---------- lifecycle ----------
 
+  // Start on the on-screen word nearest the middle, so the very first roll picks something up.
+  function startSpot(items) {
+    const cx = scrollX + innerWidth / 2, cy = scrollY + innerHeight * 0.55;
+    let best = { x: cx, y: cy }, bd = Infinity;
+    for (const it of items) {
+      if (it.el.tagName !== 'KT-W') continue;
+      const x = (it.rect.left + it.rect.right) / 2, y = (it.rect.top + it.rect.bottom) / 2;
+      if (y < scrollY + 80 || y > scrollY + innerHeight - 40) continue;
+      const d = Math.hypot(x - cx, y - cy);
+      if (d < bd) { bd = d; best = { x, y }; }
+    }
+    return best;
+  }
+
   function begin() {
     document.documentElement.classList.add('kt-playing');
     const shell = document.querySelector('main.resume-shell');
@@ -464,7 +478,7 @@
     document.body.appendChild(ballEl);
     S = {
       shell, splits, items, ballEl, canvas, ctx: canvas.getContext('2d'),
-      ball: K.createBall({ x: innerWidth * 0.5 + scrollX, y: scrollY + innerHeight * 0.62, r: START_R }),
+      ball: K.createBall({ ...startSpot(items), r: START_R }),
       dots: fibonacciDots(), stuck: [], keys: new Set(), pointer: null, emitter: K.createEmitter(),
       left: items.length, count: 0, stamp: 0, frames: 0, scale: 1, drawR: START_R, shown: {}, last: 0,
     };
@@ -472,6 +486,7 @@
     S.emitter.on('pickup', (p) => { S.lastLabel = p.label; });
     S.observer = new ResizeObserver(handlers.resize);
     S.observer.observe(shell);
+    if (document.fonts) document.fonts.ready.then(() => { if (S) remeasure(); });
     S.raf = requestAnimationFrame(frame);
   }
 
