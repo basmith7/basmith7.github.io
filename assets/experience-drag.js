@@ -6,7 +6,9 @@
   const handle = section.querySelector('.xp-handle');
   const hint = section.querySelector('.xp-hint');
   const read = section.querySelector('.xp-read');
-  const NAMES = ['One sentence', 'One line per role', 'Highlights', 'Full detail'];
+  // Level 4 is only reachable by pulling past full detail.
+  const NAMES = ['One sentence', 'One line per role', 'Highlights', 'Full detail', 'The origin story'];
+  const MAX = NAMES.length - 1;
   const WPM = 230;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -81,7 +83,7 @@
     if (!drag.moved) return;
     hint.classList.add('used');
     const steps = Math.round(dy / STEP);
-    const next = Math.min(3, Math.max(0, drag.startLevel + steps));
+    const next = Math.min(MAX, Math.max(0, drag.startLevel + steps));
     // The handle gives a little toward the pointer, and keeps giving past either end.
     const slack = dy - (next - drag.startLevel) * STEP;
     handle.style.transform = `translateY(${Math.max(-28, Math.min(28, slack * 0.4))}px)`;
@@ -95,7 +97,7 @@
     section.classList.remove('dragging');
     handle.style.transform = '';
     // A tap without a drag steps one level shorter, wrapping back to full.
-    if (!moved) settle((level + 3) % 4);
+    if (!moved) settle(level === 0 ? 3 : level - 1);
     else if (!body.classList.contains('settling')) anchorTop = null;
   };
   handle.addEventListener('pointerup', end);
@@ -104,10 +106,10 @@
   handle.addEventListener('keydown', (event) => {
     const step = { ArrowUp: -1, ArrowLeft: -1, ArrowDown: 1, ArrowRight: 1, PageUp: -1, PageDown: 1 }[event.key];
     let next = level;
-    if (step) next = Math.min(3, Math.max(0, level + step));
+    if (step) next = Math.min(MAX, Math.max(0, level + step));
     else if (event.key === 'Home') next = 0;
-    else if (event.key === 'End') next = 3;
-    else if (event.key === 'Enter' || event.key === ' ') next = (level + 3) % 4;
+    else if (event.key === 'End') next = MAX;
+    else if (event.key === 'Enter' || event.key === ' ') next = level === 0 ? 3 : level - 1;
     else return;
     event.preventDefault();
     if (next !== level) settle(next);

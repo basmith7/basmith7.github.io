@@ -152,3 +152,8 @@ h1 { margin: 11px 0 7px; font-size: clamp(48px, 8vw, 84px); letter-spacing: -.07
 .xp-hint.used { opacity: 0; }
 .xp-read { right: 0; font-variant-numeric: tabular-nums; }
 @media print { .xp-grip, .xp .xp-tldr, .xp .role-tldr { display: none !important; } .xp .timeline, .xp [data-lv] { display: revert !important; } .xp-body { height: auto !important; overflow: visible; } .xp .role { padding-bottom: 17px !important; } }
+.xp:not([data-level="4"]) [data-lv="4"] { display: none; }
+.xp:not([data-level="4"]) .role:nth-last-child(2) { padding-bottom: 0; }
+.role-origin::before { border-style: dashed; }
+.origin-end { margin: 12px 0 0; color: var(--muted); font: italic 13px/1.4 "Space Grotesk", sans-serif; }
+@media print { .xp [data-lv="4"] { display: none !important; } .xp .role:nth-last-child(2) { padding-bottom: 0 !important; } }
