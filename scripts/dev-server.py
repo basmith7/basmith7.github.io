@@ -3,14 +3,14 @@
 
 GitHub Pages compiles assets/main.scss to /assets/main.css. The file is plain CSS behind
 Jekyll front matter, so this server strips the front matter and serves it at that path.
-Usage: python3 scripts/dev-server.py [port] [host]   (default 8765 on 127.0.0.1; pass 0.0.0.0 to expose)
+Usage: python3 scripts/dev-server.py [port] [host]   (default 3040 on 127.0.0.1; pass 0.0.0.0 to expose)
 """
 import re, sys
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8765
+PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 3040
 HOST = sys.argv[2] if len(sys.argv) > 2 else '127.0.0.1'
 
 class Handler(SimpleHTTPRequestHandler):

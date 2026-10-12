@@ -14,7 +14,7 @@ Serve the site with the included dev server (it strips Jekyll front matter from
 python3 scripts/dev-server.py
 ```
 
-Then open http://127.0.0.1:8765.
+Then open http://127.0.0.1:3040.
 
 ## Tests
 
