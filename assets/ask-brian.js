@@ -147,7 +147,7 @@
   function reset(full) {
     S = LM.buildSet(corpus, N);
     model = LM.initModel(S); epoch = 0; lossHist = [];
-    ctx = S.pairs[N].ctx.slice();
+    ctx = (S.pairs[N] ? S.pairs[N].ctx : Array(N).fill(S.idx[LM.BOS])).slice();
     renderData(); buildNet(); clearActivity(); updateMetrics();
     $('train').textContent = 'Train it a little'; $('train').disabled = false; $('full').disabled = false;
     $('trail').innerHTML = ''; steps = [];

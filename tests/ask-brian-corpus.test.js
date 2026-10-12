@@ -30,6 +30,11 @@ test('parseText rejects too many distinct words', () => {
   assert.match(r.error, /distinct words/i);
 });
 
+test('parseText rejects text too short to train on, e.g. "hi" at 3 words of context', () => {
+  const r = parseText('hi');
+  assert.match(r.error, /too short/i);
+});
+
 test('corpusText round-trips the default corpus one sentence per line', () => {
   const text = corpusText(CORPUS);
   assert.equal(parseText(text).sentences.join('\n'), CORPUS.sentences.join('\n'));
