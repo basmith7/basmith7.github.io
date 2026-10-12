@@ -1,6 +1,6 @@
-# This site is plain static HTML (index.html has no front matter), so no Jekyll
-# theme or layout is applied — GitHub Pages just runs Jekyll's default build and
-# copies the files through. Keep this file to the minimum GitHub Pages needs.
+# This site is plain static HTML. index.html carries empty front matter only so
+# Liquid stamps asset URLs with ?v={{ site.github.build_revision }}; no Jekyll theme
+# or layout is applied. Keep this file to the minimum GitHub Pages needs.
 
 title: Brian Smith
 description: Brian Smith — product and solutions builder.

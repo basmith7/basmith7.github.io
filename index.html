@@ -1,3 +1,7 @@
+---
+# Front matter only so Jekyll stamps asset URLs with the build commit (cache-busting
+# behind Cloudflare, which holds static files for hours). No layout is applied.
+---
 <!doctype html>
 <html lang="en">
 <head>
@@ -18,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="stylesheet" href="/assets/main.css?v={{ site.github.build_revision }}">
 </head>
 <body>
   <div class="aurora aurora-one" aria-hidden="true"></div>
@@ -242,7 +246,7 @@
     </div>
     <footer>© Brian Smith</footer>
   </main>
-  <script src="/assets/weightless.js"></script>
+  <script src="/assets/weightless.js?v={{ site.github.build_revision }}"></script>
   <script>
     (() => {
       const choices = [...document.querySelectorAll('[data-theme-choice]')];
@@ -310,11 +314,11 @@
       choices.forEach((choice) => choice.addEventListener('click', () => chooseTheme(choice.dataset.themeChoice, choice)));
     })();
   </script>
-  <script src="/assets/experience-drag.js"></script>
-  <script src="/assets/ask-brian-model.js"></script>
-  <script src="/assets/ask-brian-corpus.js"></script>
-  <script src="/assets/ask-brian.js"></script>
-  <script src="/assets/katamari-core.js" defer></script>
-  <script src="/assets/katamari.js" defer></script>
+  <script src="/assets/experience-drag.js?v={{ site.github.build_revision }}"></script>
+  <script src="/assets/ask-brian-model.js?v={{ site.github.build_revision }}"></script>
+  <script src="/assets/ask-brian-corpus.js?v={{ site.github.build_revision }}"></script>
+  <script src="/assets/ask-brian.js?v={{ site.github.build_revision }}"></script>
+  <script src="/assets/katamari-core.js?v={{ site.github.build_revision }}" defer></script>
+  <script src="/assets/katamari.js?v={{ site.github.build_revision }}" defer></script>
 </body>
 </html>
