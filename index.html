@@ -47,6 +47,7 @@
           <button type="button" class="theme-pill" data-theme-choice="hackerman" aria-pressed="false">Hackerman</button>
           <button type="button" class="theme-pill" data-theme-choice="mfws" aria-pressed="false">MFWS</button>
           <button type="button" class="theme-pill" data-theme-choice="weightless" aria-pressed="false">Weightless</button>
+          <button type="button" class="theme-pill" data-theme-choice="swarm" aria-pressed="false">Swarm</button>
           <button type="button" class="theme-pill" data-theme-choice="katamari" aria-pressed="false">Katamari</button>
         </nav>
         <h1>Brian <br>Smith</h1>
@@ -247,6 +248,7 @@
     <footer>© Brian Smith</footer>
   </main>
   <script src="/assets/weightless.js?v={{ site.github.build_revision }}"></script>
+  <script src="/assets/swarm.js?v={{ site.github.build_revision }}"></script>
   <script>
     (() => {
       const choices = [...document.querySelectorAll('[data-theme-choice]')];
@@ -261,6 +263,7 @@
         hackerman: { portrait: cyber },
         mfws: { portrait: plain },
         weightless: { portrait: plain, onEnter: () => Weightless.start(), onLeave: () => Weightless.teardown() },
+        swarm: { portrait: plain, persist: false, onEnter: () => Swarm.start(), onLeave: () => Swarm.stop() },
         katamari: {
           portrait: plain,
           persist: false,
